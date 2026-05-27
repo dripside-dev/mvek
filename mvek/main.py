@@ -631,8 +631,13 @@ class Game:
                 sys.exit(0)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit(0)
+                    if self.state in (Game.GAME_OVER, Game.WIN):
+                        self.state = Game.MENU
+                    elif self.state == Game.PLAY:
+                        self.state = Game.MENU
+                    else:
+                        pygame.quit()
+                        sys.exit(0)
                 if self.state == Game.MENU:
                     if event.key == pygame.K_RETURN:
                         self.new_run()

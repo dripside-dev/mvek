@@ -353,3 +353,34 @@ style.textContent = `
 .tabs-nav { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 24px; }
 `;
 document.head.appendChild(style);
+
+// Скрываем .html из адресной строки
+(function() {
+  var titles = {
+    'index.html':    'MVEK — College Roguelike',
+    'about.html':    'Об игре — MVEK',
+    'gameplay.html': 'Геймплей — MVEK',
+    'team.html':     'Команда — MVEK',
+    'download.html': 'Скачать — MVEK',
+    'contact.html':  'Обратная связь — MVEK',
+    'devlog.html':   'Devlog — MVEK'
+  };
+
+  function cleanURL() {
+    var path = window.location.pathname;
+    var file = path.split('/').pop();
+    var title = titles[file];
+
+    if (title && path.indexOf('.html') !== -1) {
+      var cleanPath = path.replace('/' + file, '') || '/';
+      history.replaceState(null, title, cleanPath);
+      document.title = title;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cleanURL);
+  } else {
+    cleanURL();
+  }
+})();

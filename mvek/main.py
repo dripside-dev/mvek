@@ -61,6 +61,7 @@ class Game:
         sounds.init()
         pygame.display.set_caption(TITLE)
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+        self.game_surface = pygame.Surface((SCREEN_W, SCREEN_H))
         self._fullscreen = False
         self.clock = pygame.time.Clock()
 
@@ -321,11 +322,11 @@ class Game:
         self._check_door_transition()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        self.game_surface.fill(BLACK)
 
         if self.state == Game.MENU:
             self._draw_menu()
-            pygame.display.flip()
+            self._flip()
             return
 
         if self.floor is None or self.current_room is None:
@@ -342,25 +343,25 @@ class Game:
             dx, dy = self._trans_dir
             shift_x = int(-dx * ROOM_W * t)
             shift_y = int(-dy * ROOM_H * t)
-            self._trans_from.draw(self.screen, ox + shift_x, oy + shift_y)
-            self._trans_to.draw(self.screen,
+            self._trans_from.draw(self.game_surface, ox + shift_x, oy + shift_y)
+            self._trans_to.draw(self.game_surface,
                                 ox + shift_x + dx * ROOM_W,
                                 oy + shift_y + dy * ROOM_H)
         else:
-            self.current_room.draw(self.screen, ox + sx, oy + sy)
-            fx.draw(self.screen, ox + sx, oy + sy)
-            draw_floats(self.screen, ox + sx, oy + sy)
+            self.current_room.draw(self.game_surface, ox + sx, oy + sy)
+            fx.draw(self.game_surface, ox + sx, oy + sy)
+            draw_floats(self.game_surface, ox + sx, oy + sy)
 
-        draw_hud(self.screen, self.student, self.floor, self.current_room)
-        draw_pickup_popup(self.screen, self._pickup_name,
+        draw_hud(self.game_surface, self.student, self.floor, self.current_room)
+        draw_pickup_popup(self.game_surface, self._pickup_name,
                           self._pickup_flavor, self._pickup_t)
-        draw_floor_banner(self.screen, self._banner_label, self._banner_t)
+        draw_floor_banner(self.game_surface, self._banner_label, self._banner_t)
 
         if self.state == Game.GAME_OVER:
             overlay = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 200))
-            self.screen.blit(overlay, (0, 0))
-            draw_center_text(self.screen, [
+            self.game_surface.blit(overlay, (0, 0))
+            draw_center_text(self.game_surface, [
                 "ОТЧИСЛЕН",
                 "Шкала любви опустела.",
                 "Нажми R, чтобы поступить заново   |   Esc — выход",
@@ -369,16 +370,25 @@ class Game:
         elif self.state == Game.WIN:
             overlay = pygame.Surface((SCREEN_W, SCREEN_H), pygame.SRCALPHA)
             overlay.fill((0, 0, 0, 200))
-            self.screen.blit(overlay, (0, 0))
-            draw_center_text(self.screen, [
+            self.game_surface.blit(overlay, (0, 0))
+            draw_center_text(self.game_surface, [
                 "ДИПЛОМ ПОЛУЧЕН!",
                 "Ты вышел из здания МВЭК на свободу.",
                 "Нажми R для нового забега   |   Esc — выход",
             ], color=GOLD)
 
-        fx.draw_flash(self.screen)
-        pygame.display.flip()
+        fx.draw_flash(self.game_surface)
+        self._flip()
 
+    # ----- Новый метод ------
+    def _flip(self):
+        if self._fullscreen:
+            scaled = pygame.transform.scale(
+                self.game_surface, self.screen.get_size())
+            self.screen.blit(scaled, (0, 0))
+        else:
+            self.screen.blit(self.game_surface, (0, 0))
+        pygame.display.flip()
     # ============== Меню «Я КТО?» — рваный лист, прибитый к стене ==============
     def _draw_menu(self):
         """Полная отрисовка стартового меню.
@@ -394,13 +404,13 @@ class Game:
         # ----- Фон: грязная стена с вертикальными полосами и точками -----
         for y in range(SCREEN_H):
             shade = 24 + int(math.sin(y * 0.05) * 4)
-            pygame.draw.line(self.screen,
+            pygame.draw.line(self.game_surface,
                              (shade + 10, shade + 4, shade),
                              (0, y), (SCREEN_W, y))
         for i in range(60):
             x = (i * 73) % SCREEN_W
             y = (i * 131) % SCREEN_H
-            pygame.draw.rect(self.screen, (28, 22, 18),
+            pygame.draw.rect(self.game_surface, (28, 22, 18),
                              (x, y, 2, 2))
 
         # ----- Лист бумаги с порванными краями -----
@@ -434,14 +444,14 @@ class Game:
                            (sheet_w // 2, 6), 7)
         pygame.draw.circle(sheet, (255, 100, 100),
                            (sheet_w // 2 - 2, 4), 3)
-        self.screen.blit(sheet, (sx - 30, sy - 30))
+        self.game_surface.blit(sheet, (sx - 30, sy - 30))
 
         # ----- Рукописный заголовок «Я КТО?» -----
         f_huge = pygame.font.SysFont("comicsansms", 64, bold=True)
         if not f_huge:
             f_huge = pygame.font.SysFont("consolas", 64, bold=True)
         title = f_huge.render("Я КТО?", True, (20, 14, 10))
-        self.screen.blit(title,
+        self.game_surface.blit(title,
                          (SCREEN_W // 2 - title.get_width() // 2,
                           sy + 4))
 
@@ -449,10 +459,10 @@ class Game:
         cx = SCREEN_W // 2
         cy = sy + 180
         # Pedestal arrows (left/right)
-        pygame.draw.polygon(self.screen, (60, 40, 30),
+        pygame.draw.polygon(self.game_surface, (60, 40, 30),
                             [(cx - 120, cy), (cx - 100, cy - 14),
                              (cx - 100, cy + 14)])
-        pygame.draw.polygon(self.screen, (60, 40, 30),
+        pygame.draw.polygon(self.game_surface, (60, 40, 30),
                             [(cx + 120, cy), (cx + 100, cy - 14),
                              (cx + 100, cy + 14)])
 
@@ -470,54 +480,54 @@ class Game:
         hair, shirt = palettes[char_id]
         skin = (245, 210, 175)
 
-        pygame.draw.circle(self.screen, skin, (cx, cy - 12), 16)
-        pygame.draw.polygon(self.screen, hair,
+        pygame.draw.circle(self.game_surface, skin, (cx, cy - 12), 16)
+        pygame.draw.polygon(self.game_surface, hair,
                             [(cx - 16, cy - 18), (cx, cy - 28),
                              (cx + 16, cy - 18), (cx + 12, cy - 14),
                              (cx - 12, cy - 14)])
         if char_id == "magda":
-            pygame.draw.polygon(self.screen, (240, 80, 130),
+            pygame.draw.polygon(self.game_surface, (240, 80, 130),
                                 [(cx + 12, cy - 14), (cx + 22, cy - 20),
                                  (cx + 22, cy - 8), (cx + 12, cy - 8)])
-            pygame.draw.line(self.screen, hair,
+            pygame.draw.line(self.game_surface, hair,
                              (cx, cy + 4), (cx, cy + 22), 6)
         elif char_id == "botan":
             # Pre-glasses
-            pygame.draw.circle(self.screen, (255, 255, 255), (cx - 5, cy - 12), 4, 1)
-            pygame.draw.circle(self.screen, (255, 255, 255), (cx + 5, cy - 12), 4, 1)
-            pygame.draw.line(self.screen, (255, 255, 255),
+            pygame.draw.circle(self.game_surface, (255, 255, 255), (cx - 5, cy - 12), 4, 1)
+            pygame.draw.circle(self.game_surface, (255, 255, 255), (cx + 5, cy - 12), 4, 1)
+            pygame.draw.line(self.game_surface, (255, 255, 255),
                              (cx - 1, cy - 12), (cx + 1, cy - 12))
         elif char_id == "sportsman":
-            pygame.draw.rect(self.screen, (220, 220, 230),
+            pygame.draw.rect(self.game_surface, (220, 220, 230),
                              (cx - 16, cy - 22, 32, 3))
-            pygame.draw.rect(self.screen, (220, 60, 60),
+            pygame.draw.rect(self.game_surface, (220, 60, 60),
                              (cx - 16, cy - 25, 32, 3))
         elif char_id == "starosta":
-            pygame.draw.rect(self.screen, (200, 170, 60),
+            pygame.draw.rect(self.game_surface, (200, 170, 60),
                              (cx + 6, cy + 8, 6, 6))
-            pygame.draw.rect(self.screen, (60, 50, 20),
+            pygame.draw.rect(self.game_surface, (60, 50, 20),
                              (cx + 6, cy + 8, 6, 6), 1)
 
-        pygame.draw.circle(self.screen, (30, 25, 35), (cx - 5, cy - 12), 2)
-        pygame.draw.circle(self.screen, (30, 25, 35), (cx + 5, cy - 12), 2)
-        pygame.draw.line(self.screen, (180, 100, 110),
+        pygame.draw.circle(self.game_surface, (30, 25, 35), (cx - 5, cy - 12), 2)
+        pygame.draw.circle(self.game_surface, (30, 25, 35), (cx + 5, cy - 12), 2)
+        pygame.draw.line(self.game_surface, (180, 100, 110),
                          (cx - 3, cy - 6), (cx + 3, cy - 6), 2)
-        pygame.draw.rect(self.screen, shirt, (cx - 14, cy + 4, 28, 18))
-        pygame.draw.rect(self.screen, (50, 50, 70), (cx - 10, cy + 22, 8, 10))
-        pygame.draw.rect(self.screen, (50, 50, 70), (cx + 2, cy + 22, 8, 10))
+        pygame.draw.rect(self.game_surface, shirt, (cx - 14, cy + 4, 28, 18))
+        pygame.draw.rect(self.game_surface, (50, 50, 70), (cx - 10, cy + 22, 8, 10))
+        pygame.draw.rect(self.game_surface, (50, 50, 70), (cx + 2, cy + 22, 8, 10))
 
         # Character name + description
         f_name = pygame.font.SysFont("consolas", 18, bold=True)
         n_t = f_name.render(prof["name"], True, (40, 25, 20))
-        self.screen.blit(n_t, (cx - n_t.get_width() // 2, cy + 38))
+        self.game_surface.blit(n_t, (cx - n_t.get_width() // 2, cy + 38))
         f_d = pygame.font.SysFont("consolas", 12)
         d_t = f_d.render(prof["descr"], True, (60, 45, 35))
-        self.screen.blit(d_t, (cx - d_t.get_width() // 2, cy + 60))
+        self.game_surface.blit(d_t, (cx - d_t.get_width() // 2, cy + 60))
 
         # Page dots — show 1-of-5 (placed between description and stats)
         for i in range(len(CHARACTER_ORDER)):
             col = (180, 30, 40) if i == self._menu_character else (180, 160, 130)
-            pygame.draw.circle(self.screen, col,
+            pygame.draw.circle(self.game_surface, col,
                                (cx - 36 + i * 18, cy + 84), 3)
 
         # Stat icons row — pushed below description and dots, with row labels
@@ -531,43 +541,43 @@ class Game:
 
         # Heart
         from mvek.ui.hud import _draw_heart
-        _draw_heart(self.screen, cx - 170, stat_y, 1.0, 2)
+        _draw_heart(self.game_surface, cx - 170, stat_y, 1.0, 2)
         for i in range(5):
             col = (180, 30, 40) if i < hp_bars else (200, 180, 160)
-            pygame.draw.rect(self.screen, col,
+            pygame.draw.rect(self.game_surface, col,
                              (cx - 148 + i * 6, stat_y + 4, 4, 10))
         l = f_lbl.render("HP", True, (60, 40, 30))
-        self.screen.blit(l, (cx - 168, stat_y + 18))
+        self.game_surface.blit(l, (cx - 168, stat_y + 18))
 
         # Boot with wing — speed
-        pygame.draw.rect(self.screen, (50, 50, 70),
+        pygame.draw.rect(self.game_surface, (50, 50, 70),
                          (cx - 30, stat_y + 8, 16, 8))
-        pygame.draw.rect(self.screen, (40, 35, 50),
+        pygame.draw.rect(self.game_surface, (40, 35, 50),
                          (cx - 14, stat_y + 12, 4, 4))
-        pygame.draw.polygon(self.screen, (235, 235, 240),
+        pygame.draw.polygon(self.game_surface, (235, 235, 240),
                             [(cx - 30, stat_y + 8), (cx - 38, stat_y + 2),
                              (cx - 22, stat_y + 5)])
         for i in range(5):
             col = (60, 140, 220) if i < spd_bars else (200, 180, 160)
-            pygame.draw.rect(self.screen, col,
+            pygame.draw.rect(self.game_surface, col,
                              (cx - 8 + i * 6, stat_y + 4, 4, 10))
         l = f_lbl.render("SPEED", True, (60, 40, 30))
-        self.screen.blit(l, (cx - 30, stat_y + 18))
+        self.game_surface.blit(l, (cx - 30, stat_y + 18))
 
         # "Pen" instead of sword (family-friendly)
-        pygame.draw.line(self.screen, (60, 50, 80),
+        pygame.draw.line(self.game_surface, (60, 50, 80),
                          (cx + 100, stat_y + 14), (cx + 116, stat_y), 3)
-        pygame.draw.polygon(self.screen, (200, 200, 220),
+        pygame.draw.polygon(self.game_surface, (200, 200, 220),
                             [(cx + 116, stat_y), (cx + 120, stat_y + 2),
                              (cx + 114, stat_y + 4)])
-        pygame.draw.circle(self.screen, (220, 60, 60),
+        pygame.draw.circle(self.game_surface, (220, 60, 60),
                            (cx + 116, stat_y), 1)
         for i in range(5):
             col = (220, 160, 60) if i < dmg_bars else (200, 180, 160)
-            pygame.draw.rect(self.screen, col,
+            pygame.draw.rect(self.game_surface, col,
                              (cx + 130 + i * 6, stat_y + 4, 4, 10))
         l = f_lbl.render("DMG", True, (60, 40, 30))
-        self.screen.blit(l, (cx + 100, stat_y + 18))
+        self.game_surface.blit(l, (cx + 100, stat_y + 18))
 
         # Right-side note: difficulty
         diff_x = sx + sheet_w - 120
@@ -577,20 +587,20 @@ class Game:
                          (0, 0, 180, 180))
         pygame.draw.rect(diff_paper, (180, 160, 80, 230),
                          (0, 0, 180, 180), 2)
-        self.screen.blit(diff_paper, (diff_x, diff_y))
+        self.game_surface.blit(diff_paper, (diff_x, diff_y))
         f_small = pygame.font.SysFont("consolas", 13, bold=True)
         diffs = [("NORMAL", 0), ("HARD", 1)]
         for i, (lbl, idx) in enumerate(diffs):
             chosen = (self._menu_difficulty == idx)
             col = (180, 30, 40) if chosen else (60, 40, 30)
             t = f_small.render(("[X] " if chosen else "[ ] ") + lbl, True, col)
-            self.screen.blit(t, (diff_x + 16, diff_y + 24 + i * 24))
+            self.game_surface.blit(t, (diff_x + 16, diff_y + 24 + i * 24))
         hint = f_small.render("TAB — сложность", True, (60, 40, 30))
-        self.screen.blit(hint, (diff_x + 16, diff_y + 100))
+        self.game_surface.blit(hint, (diff_x + 16, diff_y + 100))
         en = f_small.render("ENTER — играть", True, (60, 40, 30))
-        self.screen.blit(en, (diff_x + 16, diff_y + 120))
+        self.game_surface.blit(en, (diff_x + 16, diff_y + 120))
         es = f_small.render("ESC — выход", True, (60, 40, 30))
-        self.screen.blit(es, (diff_x + 16, diff_y + 140))
+        self.game_surface.blit(es, (diff_x + 16, diff_y + 140))
 
         # Left-side note: pересдачи (family-friendly, без визуала)
         ws_x = sx - 30
@@ -600,19 +610,19 @@ class Game:
                          (0, 0, 150, 130))
         pygame.draw.rect(ws_paper, (140, 100, 140, 230),
                          (0, 0, 150, 130), 2)
-        self.screen.blit(ws_paper, (ws_x, ws_y))
+        self.game_surface.blit(ws_paper, (ws_x, ws_y))
         ws_t = f_small.render("РЕЙТИНГ", True, (60, 40, 30))
-        self.screen.blit(ws_t, (ws_x + 14, ws_y + 12))
+        self.game_surface.blit(ws_t, (ws_x + 14, ws_y + 12))
         f_lg = pygame.font.SysFont("consolas", 32, bold=True)
-        self.screen.blit(f_lg.render("A+", True, (40, 140, 60)),
+        self.game_surface.blit(f_lg.render("A+", True, (40, 140, 60)),
                          (ws_x + 50, ws_y + 32))
         ws_sub = f_small.render("отличник", True, (60, 40, 30))
-        self.screen.blit(ws_sub, (ws_x + 30, ws_y + 80))
+        self.game_surface.blit(ws_sub, (ws_x + 30, ws_y + 80))
         # Decorative pencil
         px_, py_ = ws_x + 110, ws_y + 100
-        pygame.draw.line(self.screen, (220, 180, 60),
+        pygame.draw.line(self.game_surface, (220, 180, 60),
                          (px_, py_), (px_ - 30, py_ - 30), 4)
-        pygame.draw.polygon(self.screen, (40, 30, 25),
+        pygame.draw.polygon(self.game_surface, (40, 30, 25),
                             [(px_ - 30, py_ - 30), (px_ - 33, py_ - 33),
                              (px_ - 36, py_ - 27)])
 
@@ -626,7 +636,7 @@ class Game:
         ]
         for i, line in enumerate(ctrls):
             t = f_ctrl.render(line, True, (40, 30, 25))
-            self.screen.blit(t, (cx - t.get_width() // 2,
+            self.game_surface.blit(t, (cx - t.get_width() // 2,
                                  sy + 460 + i * 18))
 
     def handle_events(self):
@@ -666,12 +676,12 @@ class Game:
                         self.student.map_revealed = not self.student.map_revealed
                 if event.key == pygame.K_F11:
                     self._fullscreen = not self._fullscreen
-                if self._fullscreen:
-                    self.screen = pygame.display.set_mode(
-                        (SCREEN_W, SCREEN_H), pygame.FULLSCREEN)
-                else:
-                    self.screen = pygame.display.set_mode(
-                        (SCREEN_W, SCREEN_H))
+                    if self._fullscreen:
+                        self.screen = pygame.display.set_mode(
+                            (0,0), pygame.FULLSCREEN)
+                    else:
+                        self.screen = pygame.display.set_mode(
+                            (SCREEN_W, SCREEN_H))
 
     def run(self):
         while True:

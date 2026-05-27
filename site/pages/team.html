@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Команда — MVEK</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><div class="logo-pixel"></div>MVEK</a>
+  <div class="nav-links">
+    <a href="../index.html">Главная</a>
+    <a href="./pages/about.html">Об игре</a>
+    <a href="./pages/gameplay.html">Геймплей</a>
+    <a href="./pages/team.html">Команда</a>
+    <a href="./pages/download.html">Скачать</a>
+    <a href="./pages/contact.html">Связь</a>
+    <a href="./pages/devlog.html">Devlog</a>
+    <a href="./pages/download.html" class="nav-cta">▶ ИГРАТЬ</a>
+  </div>
+  <button class="nav-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-content">
+
+  <div class="page-hero">
+    <span class="page-hero-label">◈ О НАС</span>
+    <h1 class="page-hero-title">КОМАНДА РАЗРАБОТЧИКОВ</h1>
+  </div>
+
+  <!-- TEAM -->
+  <section class="section">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ КОМАНДА</span>
+      <h2 class="section-title">Студенты, <span>которые сделали это</span></h2>
+      <div class="section-divider"></div>
+      <p style="font-family:var(--font-display); font-size:19px; color:var(--gray-light);">MVEK создан студентами колледжа МВЭК с нуля. Чистый Python, никаких платных движков.</p>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av1"></canvas>
+        </div>
+        <div class="team-name">АЛЕКСЕЙ К.</div>
+        <div class="team-role">GAME DESIGNER · LEAD</div>
+        <p class="team-bio">Придумал концепцию, механики и балансировку. Отвечает за то, что играть — весело, а не больно.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-gold">ГЕЙМДИЗАЙН</span>
+          <span class="tag tag-cyan">БАЛАНС</span>
+        </div>
+      </div>
+
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av2"></canvas>
+        </div>
+        <div class="team-name">МИХАИЛ Р.</div>
+        <div class="team-role">ГЛАВНЫЙ ПРОГРАММИСТ</div>
+        <p class="team-bio">Архитектура ECS, система снарядов, генерация этажей, боссы. Если что-то работает — это он.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-purple">PYTHON</span>
+          <span class="tag tag-cyan">PYGAME</span>
+        </div>
+      </div>
+
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av3"></canvas>
+        </div>
+        <div class="team-name">ЕКАТЕРИНА В.</div>
+        <div class="team-role">ART DIRECTOR · UI</div>
+        <p class="team-bio">Пиксель-арт спрайты, иконки предметов, интерфейс, HUD. Цветовая палитра — её рук дело.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-red">PIXEL ART</span>
+          <span class="tag tag-gold">UI/UX</span>
+        </div>
+      </div>
+
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av4"></canvas>
+        </div>
+        <div class="team-name">ДМИТРИЙ Н.</div>
+        <div class="team-role">LEVEL DESIGNER</div>
+        <p class="team-bio">Дизайн комнат, расстановка врагов, настройка мини-боссов и написание лора игрового мира.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-green">УРОВНИ</span>
+          <span class="tag tag-cyan">ЛОР</span>
+        </div>
+      </div>
+
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av5"></canvas>
+        </div>
+        <div class="team-name">АННА С.</div>
+        <div class="team-role">SOUND DESIGNER</div>
+        <p class="team-bio">Звуковые эффекты, фоновая музыка, интеграция с pygame.mixer. Создаёт атмосферу.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-purple">ЗВУК</span>
+          <span class="tag tag-gold">МУЗЫКА</span>
+        </div>
+      </div>
+
+      <div class="team-card" data-anim>
+        <div class="team-avatar">
+          <canvas width="64" height="64" class="sprite-canvas" id="av6"></canvas>
+        </div>
+        <div class="team-name">ИВАН Т.</div>
+        <div class="team-role">QA · ТЕСТИРОВЩИК</div>
+        <p class="team-bio">Находит баги, проверяет баланс, пишет отчёты. Прошёл игру больше всех раз из команды.</p>
+        <div style="margin-top:12px; display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">
+          <span class="tag tag-red">ТЕСТЫ</span>
+          <span class="tag tag-cyan">БАГИ</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section" style="background:var(--bg-mid); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ ИСТОРИЯ РАЗРАБОТКИ</span>
+      <h2 class="section-title">Как всё <span>началось</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="max-width:700px; margin:0 auto; position:relative;">
+      <!-- Timeline line -->
+      <div style="position:absolute; left:28px; top:0; bottom:0; width:3px; background:linear-gradient(180deg, var(--gold), var(--cyan), var(--purple)); display:none;" class="tl-line"></div>
+
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div class="feature-card" data-anim style="border-left:4px solid var(--gold);">
+          <div style="font-family:var(--font-pixel); font-size:8px; color:var(--gold); margin-bottom:8px; letter-spacing:2px;">СЕНТЯБРЬ 2025</div>
+          <h3 class="feature-title">ИДЕЯ</h3>
+          <p class="feature-desc">На паре по программированию кто-то спросил: «А что, если сделать рогалик про наш колледж?» Все засмеялись. Потом решили попробовать.</p>
+        </div>
+        <div class="feature-card" data-anim style="border-left:4px solid var(--cyan);">
+          <div style="font-family:var(--font-pixel); font-size:8px; color:var(--cyan); margin-bottom:8px; letter-spacing:2px;">ОКТЯБРЬ 2025</div>
+          <h3 class="feature-title">ПЕРВЫЙ ПРОТОТИП</h3>
+          <p class="feature-desc">Студент умел ходить и стрелять. Один тьютор умел преследовать. Комнаты были квадратами. Мы были счастливы.</p>
+        </div>
+        <div class="feature-card" data-anim style="border-left:4px solid var(--purple);">
+          <div style="font-family:var(--font-pixel); font-size:8px; color:var(--purple); margin-bottom:8px; letter-spacing:2px;">ДЕКАБРЬ 2025</div>
+          <h3 class="feature-title">v1.0 — ПЕРВЫЙ РЕЛИЗ</h3>
+          <p class="feature-desc">Три этажа, базовые предметы, первый босс. Показали однокурсникам. Они играли на переменах.</p>
+        </div>
+        <div class="feature-card" data-anim style="border-left:4px solid var(--green);">
+          <div style="font-family:var(--font-pixel); font-size:8px; color:var(--green); margin-bottom:8px; letter-spacing:2px;">ФЕВРАЛЬ 2026</div>
+          <h3 class="feature-title">v2.0 — БОЛЬШОЕ ОБНОВЛЕНИЕ</h3>
+          <p class="feature-desc">55+ предметов, 5 этажей, 10 мини-боссов, система трансформаций. Игра обрела форму.</p>
+        </div>
+        <div class="feature-card" data-anim style="border-left:4px solid var(--gold); border-color:var(--gold);">
+          <div style="font-family:var(--font-pixel); font-size:8px; color:var(--gold); margin-bottom:8px; letter-spacing:2px;">МАЙ 2026</div>
+          <h3 class="feature-title">v3.1 — ТЕКУЩАЯ ВЕРСИЯ ★</h3>
+          <p class="feature-desc">Финальный Директор с двумя фазами, 4 этажных босса, балансировка, этот сайт. Сдаём как дипломный проект!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDITS -->
+  <section class="section center" data-anim>
+    <span class="section-label">◈ БЛАГОДАРНОСТИ</span>
+    <div style="max-width:600px; margin:20px auto;">
+      <div class="pixel-box-gold" style="background:var(--bg-panel); padding:32px;">
+        <p style="font-family:var(--font-display); font-size:19px; color:var(--gray-light); line-height:1.8; margin-bottom:16px;">
+          Спасибо всем однокурсникам, которые терпеливо тестировали игру и не щадили критикой.
+        </p>
+        <p style="font-family:var(--font-display); font-size:19px; color:var(--gray-light); line-height:1.8; margin-bottom:16px;">
+          Спасибо нашим преподавателям — вдохновение для врагов пришло именно от вас. Это комплимент!
+        </p>
+        <p style="font-family:var(--font-pixel); font-size:9px; color:var(--gold); letter-spacing:2px;">
+          СДЕЛАНО С ❤ В МВЭК · 2025–2026
+        </p>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:32px;">
+      <a href="contact.html" class="btn btn-outline">НАПИСАТЬ КОМАНДЕ</a>
+      <a href="download.html" class="btn btn-gold">СКАЧАТЬ ИГРУ</a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><span class="footer-logo">MVEK</span><p class="footer-desc">Top-down рогалик о студенческих буднях. Python + Pygame.</p></div>
+    <div>
+      <div class="footer-heading">СТРАНИЦЫ</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Главная</a></li><li><a href="about.html">Об игре</a></li><li><a href="gameplay.html">Геймплей</a></li><li><a href="team.html">Команда</a></li><li><a href="download.html">Скачать</a></li><li><a href="contact.html">Обратная связь</a></li>
+      </ul>
+    </div>
+    <div><div class="footer-heading">ВЕРСИЯ</div><ul class="footer-links"><li><a href="#">v3.1</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 MVEK GAME STUDIO</span>
+    <span class="footer-copy" style="color:var(--gold);">СДЕЛАНО В МВЭК</span>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+// Draw pixel avatars for team members
+const avatarColors = ['#4cc9f0','#e63946','#9d4edd','#52b788','#f5c842','#6c6c8a'];
+const avatarLabels = ['АК','МР','ЕВ','ДН','АС','ИТ'];
+document.addEventListener('DOMContentLoaded', () => {
+  [1,2,3,4,5,6].forEach(i => {
+    const c = document.getElementById('av' + i);
+    if (!c) return;
+    const ctx = c.getContext('2d');
+    const color = avatarColors[i-1];
+    const label = avatarLabels[i-1];
+    const cx = c.width/2, cy = c.height/2;
+
+    // Body
+    ctx.fillStyle = color;
+    ctx.fillRect(cx-16, cy-8, 32, 24);
+
+    // Head
+    ctx.fillStyle = '#f5d87a';
+    ctx.fillRect(cx-12, cy-26, 24, 22);
+
+    // Eyes
+    ctx.fillStyle = '#000';
+    ctx.fillRect(cx-7, cy-20, 4, 4);
+    ctx.fillRect(cx+3, cy-20, 4, 4);
+
+    // Label
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, cx, cy+8);
+  });
+});
+</script>
+</body>
+</html>

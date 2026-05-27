@@ -51,6 +51,10 @@ class Game:
     GAME_OVER = "game_over"
     WIN = "win"
 
+    # ----- Прграмный рендер для F11 -----
+    import os
+    os.environ["SDL_RENDER_DRIVER"] = "software"
+
     def __init__(self):
         # ----- Инициализация pygame и аудио -----
         pygame.init()
@@ -660,7 +664,8 @@ class Game:
                         self.student.place_bomb(self.current_room)
                     if event.key == pygame.K_m:
                         self.student.map_revealed = not self.student.map_revealed
-                self._fullscreen = not self._fullscreen
+                if event.key == pygame.K_F11:
+                    self._fullscreen = not self._fullscreen
                 if self._fullscreen:
                     self.screen = pygame.display.set_mode(
                         (SCREEN_W, SCREEN_H), pygame.FULLSCREEN)

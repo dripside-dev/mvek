@@ -57,6 +57,7 @@ class Game:
         sounds.init()
         pygame.display.set_caption(TITLE)
         self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
+        self._fullscreen = False
         self.clock = pygame.time.Clock()
 
         # ----- Текущее состояние и игровые объекты -----
@@ -659,6 +660,13 @@ class Game:
                         self.student.place_bomb(self.current_room)
                     if event.key == pygame.K_m:
                         self.student.map_revealed = not self.student.map_revealed
+                self._fullscreen = not self._fullscreen
+                if self._fullscreen:
+                    self.screen = pygame.display.set_mode(
+                        (SCREEN_W, SCREEN_H), pygame.FULLSCREEN)
+                else:
+                    self.screen = pygame.display.set_mode(
+                        (SCREEN_W, SCREEN_H))
 
     def run(self):
         while True:

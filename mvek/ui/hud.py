@@ -222,27 +222,44 @@ def draw_hud(surface, student, floor, current_room) -> None:
 
     # Passives inventory — moved further right so it does not overlap
     # the relocated active slot.
+   # Passives inventory — moved further right so it does not overlap
+    # the relocated active slot.
     inv_x = slot_rect.right + 36
     inv_y = ROOM_H + 4
     inv_t = _font(11, bold=True).render("ИНВЕНТАРЬ:", True, WHITE)
     surface.blit(inv_t, (inv_x, inv_y))
     from mvek.items.items import ITEMS_BY_NAME, paint_icon
-    for i, name in enumerate(student.passives):
-        it = ITEMS_BY_NAME.get(name)
-        if it is None:
-            continue
-        x = inv_x + (i % 8) * 22
-        y = inv_y + 16 + (i // 8) * 22
-        pygame.draw.rect(surface, (26, 22, 36), (x, y, 20, 20),
-                         border_radius=3)
-        pygame.draw.rect(surface, (60, 54, 76), (x, y, 20, 20), 1,
-                         border_radius=3)
-        icon = it.get("icon")
-        if icon:
-            paint_icon(surface, icon, x + 10, y + 10, scale=0.55)
-        else:
-            pygame.draw.circle(surface, it["color"], (x + 10, y + 10), 7)
-            pygame.draw.circle(surface, (255, 255, 255), (x + 7, y + 7), 2)
+    start_x = 20
+    start_y = surface.get_height() - 45
+    icon_size = 14
+    spacing = 5
+    items_per_row = 15
+
+    if student.passives:
+        f_inv = pygame.font.SysFont("consolas", 11, bold=True)
+        inv_lbl = f_inv.render("ITEMS:", True, (130, 120, 110))
+        surface.blit(inv_lbl, (start_x, start_y - 14))
+
+        for idx, ite in enumerate(student.passives):
+            row = idx // items_per_row
+            col = idx % items_per_row
+
+            x = start_x + col * (icon_size + spacing)
+            y = start_y + row * (icon_size + spacing)
+
+            h = hash(str(ite))
+            r = (h & 0xFF) % 155 + 100
+            g = ((h >> 8) & 0xFF) % 155 + 100
+            b = ((h >> 16) & 0xFF) % 155 + 100
+            my_color = (r, g, b)
+
+            center_x = x + icon_size // 2
+            center_y = y + icon_size // 2
+
+            pygame.draw.circle(surface,(15, 10, 10), (center_x + 1, center_y + 1), icon_size // 2)
+            pygame.draw.circle(surface,my_color, (center_x, center_y), icon_size // 2)
+            pygame.draw.circle(surface,(30, 25, 25), (center_x, center_y), icon_size // 2, 1)
+            pygame.draw.circle(surface,(255, 255, 255), (center_x - 2, center_y - 2), 1)
 
     draw_minimap(surface, floor, current_room, student.map_revealed)
 

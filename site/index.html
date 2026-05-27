@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVEK — College Roguelike</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">
+    <div class="logo-pixel"></div>
+    MVEK
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Главная</a>
+    <a href="pages/about.html">Об игре</a>
+    <a href="pages/gameplay.html">Геймплей</a>
+    <a href="pages/team.html">Команда</a>
+    <a href="pages/download.html">Скачать</a>
+    <a href="pages/contact.html">Связь</a>
+    <a href="pages/devlog.html">Devlog</a>
+    <a href="pages/download.html" class="nav-cta">▶ ИГРАТЬ</a>
+  </div>
+  <button class="nav-toggle" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+
+  <div class="hero-badge">◈ НОВЫЙ ЗАБЕГ ДОСТУПЕН ◈</div>
+
+  <h1 class="hero-title">MVEK</h1>
+  <p class="hero-subtitle">COLLEGE ROGUELIKE</p>
+
+  <canvas id="heroCanvas" width="200" height="200" class="sprite-canvas" style="margin: 20px auto; display:block;"></canvas>
+
+  <p style="font-family: var(--font-display); font-size: 22px; color: var(--gray-light); max-width: 600px; margin: 0 auto 32px; letter-spacing: 1px;">
+    Top-down рогалик о студенческих буднях. Пробивайся сквозь этажи МВЭК, отбивайся от тьюторов докладами, собирай предметы и победи Директора.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="pages/download.html" class="btn btn-red">▶ СКАЧАТЬ ИГРУ</a>
+    <a href="pages/about.html" class="btn btn-outline">✦ ОБ ИГРЕ</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="num" data-count="55" data-suffix="+">0</span>
+      <span class="label">ПРЕДМЕТОВ</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" data-count="5">0</span>
+      <span class="label">ЭТАЖЕЙ</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" data-count="10">0</span>
+      <span class="label">МИНИ-БОССОВ</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num" data-count="11">0</span>
+      <span class="label">ТИПОВ КОМНАТ</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    ★ ТЫ ПОЛУЧИЛ: ЗАЧЁТКУ — УДАЧА +2 &nbsp;&nbsp;&nbsp; ✦ НОВАЯ КОМНАТА: МАГАЗИН &nbsp;&nbsp;&nbsp; ★ ТЬЮТОР ОБНАРУЖЕН — ОТСТРЕЛЯЙСЯ ДОКЛАДАМИ &nbsp;&nbsp;&nbsp; ✦ КЛЮЧ ПОДОБРАН &nbsp;&nbsp;&nbsp; ★ ЭТАЖ 3: КАФЕДРЫ &nbsp;&nbsp;&nbsp; ✦ МИ НИ-БОСС: БИБЛИОТЕКАРЬ &nbsp;&nbsp;&nbsp; ★ ТРАНСФОРМАЦИЯ: ОТЛИЧНИК АКТИВИРОВАН &nbsp;&nbsp;&nbsp; ✦ ПОБЕДА: ДЕКАНАТ ПОКОРЁН &nbsp;&nbsp;&nbsp;
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-header" data-anim>
+    <span class="section-label">◈ ОСОБЕННОСТИ</span>
+    <h2 class="section-title">Почему <span>MVEK</span>?</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">РОГАЛИК-КЛАССИКА</h3>
+      <p class="feature-desc">Процедурная генерация этажей, случайные предметы, перманентная смерть. Каждый забег уникален — от расположения комнат до выпавших предметов.</p>
+    </div>
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">СТУДЕНЧЕСКИЙ АНТУРАЖ</h3>
+      <p class="feature-desc">Снаряды — рефераты и билеты. Валюта — рубли. «Здоровье» — шкала «Любовь и одобрение». Враги — тьюторы и преподаватели. Стиль — семейный!</p>
+    </div>
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">СИСТЕМА ПРЕДМЕТОВ</h3>
+      <p class="feature-desc">55+ предметов с уникальными эффектами. Пассивные усиления, активные способности, 5 трансформаций при сборе тематических наборов.</p>
+    </div>
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">БОССЫ И МИНИ-БОССЫ</h3>
+      <p class="feature-desc">Уникальные боссы на каждом этаже, 10 мини-боссов с разными механиками. Финальный Директор — 2 фазы, 5 паттернов атак.</p>
+    </div>
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">TWIN-STICK УПРАВЛЕНИЕ</h3>
+      <p class="feature-desc">WASD для движения, стрелки для стрельбы. Хлопушки-бомбы, активные предметы, орбитали — полный контроль над студентом.</p>
+    </div>
+    <div class="feature-card" data-anim>
+      <canvas class="feature-icon sprite-canvas" width="48" height="48"></canvas>
+      <h3 class="feature-title">ЧИСТЫЙ PYTHON</h3>
+      <p class="feature-desc">Только Python 3.10+ и Pygame. Никаких лишних зависимостей. Запускается одной командой на Windows, macOS и Linux.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK FLOORS PREVIEW -->
+<section class="section" style="background: var(--bg-mid); border-top: 3px solid var(--border); border-bottom: 3px solid var(--border);">
+  <div class="section-header" data-anim>
+    <span class="section-label">◈ СТРУКТУРА ИГРЫ</span>
+    <h2 class="section-title">5 Этажей МВЭК</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="floors-list">
+    <div class="floor-item" data-anim>
+      <div class="floor-num">1</div>
+      <div class="floor-info">
+        <h3>ВЕСТИБЮЛЬ</h3>
+        <p>16 комнат · Тьюторы и первые испытания · Деревянные сундуки</p>
+      </div>
+      <div class="floor-diff" data-level="1"></div>
+    </div>
+    <div class="floor-item" data-anim>
+      <div class="floor-num">2</div>
+      <div class="floor-info">
+        <h3>КОРИДОРЫ</h3>
+        <p>18 комнат · Преподаватели появляются · Сложность ×1.15</p>
+      </div>
+      <div class="floor-diff" data-level="2"></div>
+    </div>
+    <div class="floor-item" data-anim>
+      <div class="floor-num">3</div>
+      <div class="floor-info">
+        <h3>КАФЕДРЫ</h3>
+        <p>20 комнат · Мини-боссы усиливаются · 2 комнаты сокровищ</p>
+      </div>
+      <div class="floor-diff" data-level="3"></div>
+    </div>
+    <div class="floor-item" data-anim>
+      <div class="floor-num">4</div>
+      <div class="floor-info">
+        <h3>ЛАБОРАТОРИИ</h3>
+        <p>22 комнаты · Элитные враги · Сложность ×1.45</p>
+      </div>
+      <div class="floor-diff" data-level="4"></div>
+    </div>
+    <div class="floor-item" data-anim style="border-color: var(--red);">
+      <div class="floor-num" style="color: var(--red);">5</div>
+      <div class="floor-info">
+        <h3 style="color: var(--red);">ДЕКАНАТ ⚠</h3>
+        <p>24 комнаты · Финальный босс — Директор · 2 фазы битвы</p>
+      </div>
+      <div class="floor-diff" data-level="5"></div>
+    </div>
+  </div>
+
+  <div class="center mt-40">
+    <a href="pages/about.html" class="btn btn-outline">ПОДРОБНЕЕ ОБ ИГРЕ →</a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" data-anim>
+  <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+    <h2 style="font-family: var(--font-pixel); font-size: clamp(14px,3vw,24px); color: var(--gold); margin-bottom: 20px; text-shadow: 2px 2px 0 var(--gold-dark);">ГОТОВ К ПЕРВОМУ ЗАБЕГУ?</h2>
+    <p style="font-family: var(--font-display); font-size: 20px; color: var(--gray-light); margin-bottom: 32px;">Скачай игру бесплатно, нужен только Python и Pygame.</p>
+    <div class="hero-buttons">
+      <a href="pages/download.html" class="btn btn-gold">▼ СКАЧАТЬ</a>
+      <a href="pages/gameplay.html" class="btn btn-outline">КАК ИГРАТЬ</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <span class="footer-logo">MVEK</span>
+      <p class="footer-desc">Top-down рогалик о студенческих буднях колледжа МВЭК. Сделан с любовью на Python + Pygame.</p>
+    </div>
+    <div>
+      <div class="footer-heading">СТРАНИЦЫ</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="pages/about.html">Об игре</a></li>
+        <li><a href="pages/gameplay.html">Геймплей</a></li>
+        <li><a href="pages/team.html">Команда</a></li>
+        <li><a href="pages/download.html">Скачать</a></li>
+        <li><a href="pages/contact.html">Обратная связь</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">ТЕХНОЛОГИИ</div>
+      <ul class="footer-links">
+        <li><a href="#">Python 3.10+</a></li>
+        <li><a href="#">Pygame</a></li>
+        <li><a href="#">Numpy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 MVEK GAME STUDIO · СДЕЛАНО В КОЛЛЕДЖЕ</span>
+    <span class="footer-copy" style="color: var(--gold);">v3.1 — COLLEGE ROGUELIKE</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // Draw feature icons after load
+  document.addEventListener('DOMContentLoaded', () => {
+    const colors = ['#4cc9f0','#f5c842','#9d4edd','#e63946','#52b788','#f5c842'];
+    const shapes = ['circle','star','rect','circle','star','rect'];
+    document.querySelectorAll('.feature-icon').forEach((c, i) => {
+      drawItemIcon(c, colors[i % colors.length], shapes[i % shapes.length]);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Геймплей — MVEK</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><div class="logo-pixel"></div>MVEK</a>
+  <div class="nav-links">
+    <a href="../index.html">Главная</a>
+    <a href="about.html">Об игре</a>
+    <a href="gameplay.html" class="active">Геймплей</a>
+    <a href="team.html">Команда</a>
+    <a href="download.html">Скачать</a>
+    <a href="contact.html">Связь</a>
+    <a href="devlog.html">Devlog</a>
+    <a href="download.html" class="nav-cta">▶ ИГРАТЬ</a>
+  </div>
+  <button class="nav-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-content">
+
+  <div class="page-hero">
+    <span class="page-hero-label">◈ КАК ИГРАТЬ</span>
+    <h1 class="page-hero-title">ГЕЙМПЛЕЙ</h1>
+  </div>
+
+  <!-- CONTROLS -->
+  <section class="section">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ УПРАВЛЕНИЕ</span>
+      <h2 class="section-title">Клавиши и <span>действия</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="max-width: 800px; margin: 0 auto;" data-anim>
+      <table class="controls-table">
+        <thead>
+          <tr>
+            <th>КЛАВИША</th>
+            <th>ДЕЙСТВИЕ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></td>
+            <td>Движение студента</td>
+          </tr>
+          <tr>
+            <td><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></td>
+            <td>Стрелять «докладами» (twin-stick)</td>
+          </tr>
+          <tr>
+            <td><kbd>Space</kbd></td>
+            <td>Использовать активный предмет (если кулдаун заполнен)</td>
+          </tr>
+          <tr>
+            <td><kbd>B</kbd></td>
+            <td>Положить хлопушку (бомбу)</td>
+          </tr>
+          <tr>
+            <td><kbd>M</kbd></td>
+            <td>Вкл/выкл миникарту</td>
+          </tr>
+          <tr>
+            <td><kbd>Esc</kbd></td>
+            <td>Выход из игры</td>
+          </tr>
+          <tr>
+            <td><kbd>R</kbd></td>
+            <td>Новый забег (на экранах GAME OVER / WIN)</td>
+          </tr>
+          <tr>
+            <td><kbd>←</kbd><kbd>→</kbd> или <kbd>A</kbd><kbd>D</kbd></td>
+            <td>Выбор персонажа в меню</td>
+          </tr>
+          <tr>
+            <td><kbd>Tab</kbd></td>
+            <td>Переключение сложности в меню</td>
+          </tr>
+          <tr>
+            <td><kbd>Enter</kbd></td>
+            <td>Начать забег</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pixel-box-cyan" style="background:var(--bg-panel); padding:20px 24px; margin-top:20px;">
+        <span style="font-family:var(--font-pixel); font-size:8px; color:var(--cyan); letter-spacing:2px;">◈ ВАЖНО</span>
+        <p style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); margin-top:8px;">Подбор предметов и сундуков — <strong style="color:var(--white);">автоматический</strong>. Просто подойди к ним — сработают сами. Клавиша E больше не нужна.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROOM TYPES -->
+  <section class="section" style="background: var(--bg-mid); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ КОМНАТЫ</span>
+      <h2 class="section-title">Типы <span>комнат</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="features-grid" style="max-width:1000px; margin:0 auto;">
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--white); margin-bottom:12px;">🚪 START</div>
+        <h3 class="feature-title">СТАРТОВАЯ</h3>
+        <p class="feature-desc">Безопасная комната в начале этажа. Можно передохнуть перед следующим забегом.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--gray-light); margin-bottom:12px;">⚔ NORMAL</div>
+        <h3 class="feature-title">БОЕВАЯ</h3>
+        <p class="feature-desc">Стандартная комната с врагами. После зачистки — награда: монета, сердце, ключ или сундук.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--red); margin-bottom:12px;">💀 BOSS</div>
+        <h3 class="feature-title">БОСС</h3>
+        <p class="feature-desc">Финальный этажный босс. После победы появляется лестница на следующий этаж.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--gold); margin-bottom:12px;">💎 TREASURE</div>
+        <h3 class="feature-title">СОКРОВИЩНИЦА</h3>
+        <p class="feature-desc">Комната с предметом на пьедестале. 1-2 на каждый этаж. Заходи — подбирай.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--green); margin-bottom:12px;">🛒 SHOP</div>
+        <h3 class="feature-title">МАГАЗИН</h3>
+        <p class="feature-desc">Предметы за рубли. Иногда выгоднее сохранить монеты, иногда — купить нужный апгрейд.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--purple); margin-bottom:12px;">🔮 SECRET</div>
+        <h3 class="feature-title">СЕКРЕТНАЯ</h3>
+        <p class="feature-desc">Скрытая комната с бонусами. Найти не просто — нужна наблюдательность и немного удачи.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--cyan); margin-bottom:12px;">🎮 ARCADE</div>
+        <h3 class="feature-title">АРКАДНАЯ</h3>
+        <p class="feature-desc">Особые испытания с уникальными наградами. Пройди мини-испытание и получи бонус.</p>
+      </div>
+      <div class="feature-card" data-anim>
+        <div style="font-family:var(--font-pixel); font-size:14px; color:var(--red); margin-bottom:12px;">☠ MINIBOSS</div>
+        <h3 class="feature-title">МИНИ-БОСС</h3>
+        <p class="feature-desc">Один из 10 уникальных мини-боссов. Сложнее обычного врага, но награда лучше.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITEMS SHOWCASE -->
+  <section class="section">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ ПРЕДМЕТЫ</span>
+      <h2 class="section-title">Реестр <span>предметов</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="max-w" style="max-width:1000px; margin:0 auto;">
+      <div class="tabs-nav" data-anim>
+        <button class="tab-btn active" data-group="items" data-tab="honors">ОТЛИЧНИК (7)</button>
+        <button class="tab-btn" data-group="items" data-tab="athlete">СПОРТСМЕН (6)</button>
+        <button class="tab-btn" data-group="items" data-tab="bookworm">БИБЛИОФИЛ (11)</button>
+        <button class="tab-btn" data-group="items" data-tab="hacker">ХАКЕР (6)</button>
+        <button class="tab-btn" data-group="items" data-tab="artist">АРТИСТ (5)</button>
+        <button class="tab-btn" data-group="items" data-tab="other">БЕЗ ТЕГА (20+)</button>
+      </div>
+
+      <div class="tab-panel active" data-group="items" data-tab="honors">
+        <div class="items-grid">
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="star"></canvas></div><div class="item-name">КРАСНЫЙ ДИПЛОМ</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="circle"></canvas></div><div class="item-name">ЗВЕЗДА ОТЛИЧНИКА</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e8e8f0" data-shape="rect"></canvas></div><div class="item-name">ПЕРЬЕВАЯ РУЧКА</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#1a1a7a" data-shape="circle"></canvas></div><div class="item-name">ЧЕРНИЛЬНИЦА</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#52b788" data-shape="rect"></canvas></div><div class="item-name">ИДЕАЛЬНАЯ ТЕТРАДЬ</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#c49a1a" data-shape="circle"></canvas></div><div class="item-name">МЕДАЛЬ ЗА УЧЁБУ</div><div class="item-tag">HONORS</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#2e2e4a" data-shape="rect"></canvas></div><div class="item-name">ШАПОЧКА ВЫПУСКНИКА</div><div class="item-tag">HONORS</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-group="items" data-tab="athlete">
+        <div class="items-grid">
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#52b788" data-shape="circle"></canvas></div><div class="item-name">МЕРКУРИЙ</div><div class="item-tag">ATHLETE</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e8e8f0" data-shape="rect"></canvas></div><div class="item-name">СПОРТ. ПОВЯЗКА</div><div class="item-tag">ATHLETE</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#4cc9f0" data-shape="rect"></canvas></div><div class="item-name">БЕГОВЫЕ КРОССОВКИ</div><div class="item-tag">ATHLETE</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#6c6c8a" data-shape="circle"></canvas></div><div class="item-name">ГАНТЕЛЯ</div><div class="item-tag">ATHLETE</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e8e8f0" data-shape="circle"></canvas></div><div class="item-name">СВИСТОК</div><div class="item-tag">ATHLETE</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e63946" data-shape="circle"></canvas></div><div class="item-name">ФУТБОЛЬНЫЙ МЯЧ</div><div class="item-tag">ATHLETE</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-group="items" data-tab="bookworm">
+        <div class="items-grid">
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="rect"></canvas></div><div class="item-name">ШПАРГАЛКА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#9d4edd" data-shape="rect"></canvas></div><div class="item-name">ЗАЧЁТКА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#4cc9f0" data-shape="circle"></canvas></div><div class="item-name">ОЧКИ БОТАНИКА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="circle"></canvas></div><div class="item-name">СВЕЧА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#52b788" data-shape="star"></canvas></div><div class="item-name">ОРБИТАЛЬНЫЙ КОНСПЕКТ</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#2e2e4a" data-shape="rect"></canvas></div><div class="item-name">КНИГА ДОБРОДЕТЕЛЕЙ</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#c49a1a" data-shape="rect"></canvas></div><div class="item-name">ЧИТАТЕЛЬСКИЙ БИЛЕТ</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#6c6c8a" data-shape="rect"></canvas></div><div class="item-name">ЭНЦИКЛОПЕДИЯ</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e63946" data-shape="rect"></canvas></div><div class="item-name">ЗАКЛАДКА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e8e8f0" data-shape="circle"></canvas></div><div class="item-name">ЛУПА</div><div class="item-tag">BOOKWORM</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="rect"></canvas></div><div class="item-name">ЛАМПА</div><div class="item-tag">BOOKWORM</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-group="items" data-tab="hacker">
+        <div class="items-grid">
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#9d4edd" data-shape="circle"></canvas></div><div class="item-name">МАГНИТ</div><div class="item-tag">HACKER</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#4cc9f0" data-shape="rect"></canvas></div><div class="item-name">USB</div><div class="item-tag">HACKER</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#6c6c8a" data-shape="rect"></canvas></div><div class="item-name">НОУТБУК</div><div class="item-tag">HACKER</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#52b788" data-shape="star"></canvas></div><div class="item-name">WI-FI</div><div class="item-tag">HACKER</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="circle"></canvas></div><div class="item-name">ГАРНИТУРА</div><div class="item-tag">HACKER</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#9d4edd" data-shape="rect"></canvas></div><div class="item-name">VR-ШЛЕМ</div><div class="item-tag">HACKER</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-group="items" data-tab="artist">
+        <div class="items-grid">
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e63946" data-shape="rect"></canvas></div><div class="item-name">КИСТЬ</div><div class="item-tag">ARTIST</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#9d4edd" data-shape="circle"></canvas></div><div class="item-name">ПАЛИТРА</div><div class="item-tag">ARTIST</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#f5c842" data-shape="star"></canvas></div><div class="item-name">НОТА</div><div class="item-tag">ARTIST</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#4cc9f0" data-shape="rect"></canvas></div><div class="item-name">КАМЕРА</div><div class="item-tag">ARTIST</div></div>
+          <div class="item-card"><div class="item-icon-box"><canvas width="48" height="48" class="sprite-canvas" data-color="#e8e8f0" data-shape="circle"></canvas></div><div class="item-name">МАСКА</div><div class="item-tag">ARTIST</div></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-group="items" data-tab="other">
+        <div class="pixel-box-gold" style="background:var(--bg-panel); padding:24px; text-align:center;">
+          <p style="font-family:var(--font-display); font-size:20px; color:var(--gray-light);">20+ предметов без тега — бытовые предметы, контр-механики и активные способности.</p>
+          <p style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); margin-top:12px;">Примеры: <span style="color:var(--gold);">Кружка кофе из автомата</span> (SPEED UP!), <span style="color:var(--gold);">Кошка</span> (фамильяр), <span style="color:var(--gold);">Алебастровая шкатулка</span> (активная способность)...</p>
+          <p style="font-family:var(--font-pixel); font-size:8px; color:var(--cyan); margin-top:16px;">ПОЛНЫЙ СПИСОК В ИГРЕ — КАЧАЙ И ИССЛЕДУЙ!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section" style="background:var(--bg-mid); border-top:3px solid var(--border);">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ СТАТЫ ИГРОКА</span>
+      <h2 class="section-title">Параметры <span>студента</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="max-width:700px; margin:0 auto;" data-anim>
+      <table class="controls-table">
+        <thead><tr><th>ПАРАМЕТР</th><th>БАЗОВОЕ</th><th>ЧТО ДАЁТ</th></tr></thead>
+        <tbody>
+          <tr><td>Скорость</td><td style="color:var(--cyan); font-family:var(--font-pixel); font-size:10px;">3.0</td><td>Скорость передвижения</td></tr>
+          <tr><td>Урон</td><td style="color:var(--red); font-family:var(--font-pixel); font-size:10px;">1.0</td><td>Урон одного выстрела</td></tr>
+          <tr><td>Скорострельность</td><td style="color:var(--gold); font-family:var(--font-pixel); font-size:10px;">2.5/сек</td><td>Выстрелов в секунду</td></tr>
+          <tr><td>Скорость снаряда</td><td style="color:var(--cyan); font-family:var(--font-pixel); font-size:10px;">7.0</td><td>Пикселей за кадр</td></tr>
+          <tr><td>Дальность</td><td style="color:var(--green); font-family:var(--font-pixel); font-size:10px;">360 px</td><td>Дистанция полёта снаряда</td></tr>
+          <tr><td>Любовь (HP)</td><td style="color:var(--red); font-family:var(--font-pixel); font-size:10px;">6 (3♥)</td><td>Полу-сердца жизни</td></tr>
+          <tr><td>Удача</td><td style="color:var(--gold); font-family:var(--font-pixel); font-size:10px;">0</td><td>Влияет на дроп наград</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><span class="footer-logo">MVEK</span><p class="footer-desc">Top-down рогалик о студенческих буднях. Python + Pygame.</p></div>
+    <div>
+      <div class="footer-heading">СТРАНИЦЫ</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Главная</a></li><li><a href="about.html">Об игре</a></li><li><a href="gameplay.html">Геймплей</a></li><li><a href="team.html">Команда</a></li><li><a href="download.html">Скачать</a></li><li><a href="contact.html">Обратная связь</a></li>
+      </ul>
+    </div>
+    <div><div class="footer-heading">ВЕРСИЯ</div><ul class="footer-links"><li><a href="#">v3.1</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 MVEK GAME STUDIO</span>
+    <span class="footer-copy" style="color:var(--gold);">COLLEGE ROGUELIKE</span>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('canvas[data-color]').forEach(c => {
+    drawItemIcon(c, c.dataset.color, c.dataset.shape || 'rect');
+  });
+});
+</script>
+</body>
+</html>

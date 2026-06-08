@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devlog — MVEK</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="../index.html"><div class="logo-pixel"></div>MVEK</a>
+  <div class="nav-links">
+    <a href="../index.html">Главная</a>
+    <a href="about.html">Об игре</a>
+    <a href="gameplay.html">Геймплей</a>
+    <a href="team.html">Команда</a>
+    <a href="download.html">Скачать</a>
+    <a href="contact.html">Связь</a>
+    <a href="devlog.html">Devlog</a>
+    <a href="MVEK%20-%20%D0%9A%D0%B0%D1%82%D0%B0%D0%BB%D0%BE%D0%B3%20%D0%BF%D1%80%D0%B5%D0%B4%D0%BC%D0%B5%D1%82%D0%BE%D0%B2.html">Предметы</a>
+    <a href="download.html" class="nav-cta">▶ ИГРАТЬ</a>
+  </div>
+  <button class="nav-toggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-content">
+
+  <div class="page-hero">
+    <span class="page-hero-label">◈ ИСТОРИЯ ВЕРСИЙ</span>
+    <h1 class="page-hero-title">DEVLOG</h1>
+  </div>
+
+  <section class="section">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ CHANGELOG</span>
+      <h2 class="section-title">Что нового в <span>каждой версии</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:24px;">
+
+      <!-- v3.1 -->
+      <div class="feature-card pixel-box-gold" data-anim style="background:var(--bg-panel); padding:28px 32px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+          <div>
+            <span style="font-family:var(--font-pixel); font-size:16px; color:var(--gold); text-shadow:2px 2px 0 var(--gold-dark);">v3.1</span>
+            <span class="tag tag-gold" style="margin-left:10px;">ТЕКУЩАЯ</span>
+          </div>
+          <span style="font-family:var(--font-pixel); font-size:8px; color:var(--gray); letter-spacing:2px;">МАЙ 2026</span>
+        </div>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Финальный босс — Директор с двумя фазами</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 4 уникальных этажных босса (bosses_extra)</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Мини-босс «Элеватор» и «Зеркальный Топпер»</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> Переработана система кулдаунов активных предметов</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> Баланс: soft-armor боссов, скорость врагов на 3-5 этаже</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--cyan); flex-shrink:0;">⚙</span> Автоподбор предметов (клавиша E удалена)</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--cyan); flex-shrink:0;">⚙</span> Исправлен баг с бесконечным кулдауном «VR-шлема»</li>
+        </ul>
+      </div>
+
+      <!-- v2.0 -->
+      <div class="feature-card" data-anim style="padding:28px 32px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+          <span style="font-family:var(--font-pixel); font-size:16px; color:var(--cyan); text-shadow:2px 2px 0 var(--cyan-dark);">v2.0</span>
+          <span style="font-family:var(--font-pixel); font-size:8px; color:var(--gray); letter-spacing:2px;">ФЕВРАЛЬ 2026</span>
+        </div>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 55+ предметов в реестре (было 12)</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 5 трансформаций: Отличник, Спортсмен, Библиофил, Хакер, Артист</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 10 мини-боссов с уникальными паттернами</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Этажи 4 и 5 — Лаборатории и Деканат</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Сундуки 4 видов (деревянный, золотой, каменный, подарочный)</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> Полная переработка HUD — сердечки, миникарта, слот предмета</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> Новые типы комнат: arcade, sacrifice, challenge, curse</li>
+        </ul>
+      </div>
+
+      <!-- v1.5 -->
+      <div class="feature-card" data-anim style="padding:28px 32px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+          <span style="font-family:var(--font-pixel); font-size:16px; color:var(--purple);">v1.5</span>
+          <span style="font-family:var(--font-pixel); font-size:8px; color:var(--gray); letter-spacing:2px;">ЯНВАРЬ 2026</span>
+        </div>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Пиксель-арт спрайты для всех предметов</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Звуковые эффекты через pygame.mixer</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Орбитали, щит, пробивающие снаряды</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> Улучшена генерация этажей — граф комнат вместо сетки</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--red); flex-shrink:0;">−</span> Убрана старая система инвентаря (нажатие E)</li>
+        </ul>
+      </div>
+
+      <!-- v1.0 -->
+      <div class="feature-card" data-anim style="padding:28px 32px; border-color:var(--gray);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
+          <div>
+            <span style="font-family:var(--font-pixel); font-size:16px; color:var(--gray-light);">v1.0</span>
+            <span class="tag" style="margin-left:10px; border-color:var(--gray); color:var(--gray); font-family:var(--font-pixel); font-size:6px; padding:3px 7px;">ПЕРВЫЙ РЕЛИЗ</span>
+          </div>
+          <span style="font-family:var(--font-pixel); font-size:8px; color:var(--gray); letter-spacing:2px;">ДЕКАБРЬ 2025</span>
+        </div>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Базовый студент: движение, стрельба докладами</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 2 типа врагов: Тьютор и Преподаватель</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> 3 этажа, 12 предметов, базовый магазин</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--green); flex-shrink:0;">+</span> Первый босс — «Завкафедрой»</li>
+          <li style="font-family:var(--font-display); font-size:18px; color:var(--gray-light); display:flex; gap:10px;"><span style="color:var(--gold); flex-shrink:0;">✦</span> ECS-каркас Entity, система комнат Room</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section class="section" style="background:var(--bg-mid); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+    <div class="section-header" data-anim>
+      <span class="section-label">◈ ДАЛЬШЕ</span>
+      <h2 class="section-title">Планы на <span>v4.0</span></h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="features-grid" style="max-width:900px; margin:0 auto;">
+      <div class="feature-card" data-anim>
+        <h3 class="feature-title" style="color:var(--green);">СОХРАНЕНИЯ</h3>
+        <p class="feature-desc">Прогресс между забегами: разблокировки персонажей, достижения, статистика.</p>
+        <div style="margin-top:12px;"><span class="tag tag-green">В РАЗРАБОТКЕ</span></div>
+      </div>
+      <div class="feature-card" data-anim>
+        <h3 class="feature-title" style="color:var(--cyan);">ГЕЙМПАД</h3>
+        <p class="feature-desc">Полная поддержка геймпадов (xinput). Twin-stick стрельба на контроллере.</p>
+        <div style="margin-top:12px;"><span class="tag tag-cyan">ПЛАНИРУЕТСЯ</span></div>
+      </div>
+      <div class="feature-card" data-anim>
+        <h3 class="feature-title" style="color:var(--gold);">НОВЫЕ ПЕРСОНАЖИ</h3>
+        <p class="feature-desc">2+ новых играбельных студента с уникальными стартовыми характеристиками.</p>
+        <div style="margin-top:12px;"><span class="tag tag-gold">ПЛАНИРУЕТСЯ</span></div>
+      </div>
+      <div class="feature-card" data-anim>
+        <h3 class="feature-title" style="color:var(--purple);">ВИЗУАЛЬНЫЕ ТРАНСФОРМАЦИИ</h3>
+        <p class="feature-desc">Смена спрайта и ауры игрока при активации трансформации.</p>
+        <div style="margin-top:12px;"><span class="tag tag-purple">ИДЕЯ</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section center" data-anim>
+    <h2 style="font-family:var(--font-pixel); font-size:clamp(12px,2vw,18px); color:var(--gold); margin-bottom:16px;">ЕСТЬ ИДЕЯ ДЛЯ v4.0?</h2>
+    <p style="font-family:var(--font-display); font-size:19px; color:var(--gray-light); margin-bottom:24px;">Напиши нам — лучшие идеи войдут в игру!</p>
+    <a href="contact.html" class="btn btn-gold">ПРЕДЛОЖИТЬ ИДЕЮ →</a>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><span class="footer-logo">MVEK</span><p class="footer-desc">Top-down рогалик о студенческих буднях. Python + Pygame.</p></div>
+    <div>
+      <div class="footer-heading">СТРАНИЦЫ</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Главная</a></li><li><a href="about.html">Об игре</a></li><li><a href="gameplay.html">Геймплей</a></li><li><a href="team.html">Команда</a></li><li><a href="download.html">Скачать</a></li><li><a href="contact.html">Обратная связь</a></li>
+      </ul>
+    </div>
+    <div><div class="footer-heading">ВЕРСИЯ</div><ul class="footer-links"><li><a href="#">v3.1 — актуальная</a></li><li><a href="devlog.html">Devlog</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 MVEK GAME STUDIO</span>
+    <span class="footer-copy" style="color:var(--gold);">COLLEGE ROGUELIKE</span>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

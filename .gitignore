@@ -1,0 +1,35 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Виртуальные окружения
+.venv/
+.venv_build/
+venv/
+ENV/
+env/
+
+# ---- PyInstaller ----
+# ВНИМАНИЕ: *.spec НЕ игнорируется — MVEK.spec это исходник сборки.
+build/
+dist/
+*.manifest
+
+# ---- Локальное состояние, генерируется при запуске ----
+mvek_save.json
+menu_layout.json
+
+# ---- Локальные инструменты / редактор ----
+.claude/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ---- Мусор ОС ----
+.DS_Store
+Thumbs.db

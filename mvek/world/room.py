@@ -85,9 +85,10 @@ class Room:
         ty = int(y // TILE)
         if tx == 0 or ty == 0 or tx == ROOM_TW - 1 or ty == ROOM_TH - 1:
             for direction, rect in self.door_rects().items():
-                if rect.collidepoint(int(x), int(y)) and self.cleared:
-                    return False
-                if rect.collidepoint(int(x), int(y)) and not self.cleared:
+                if rect.collidepoint(int(x), int(y)):
+                    # «Меркурий»: двери проходимы даже в незачищенной комнате.
+                    if self.cleared or getattr(self, "force_open_doors", False):
+                        return False
                     return True
             return True
         return False
@@ -95,6 +96,8 @@ class Room:
     # =================== Тик кадра ===================
     def update(self, dt: float, player) -> None:
         """Обновить все сущности и снаряды комнаты, проверить зачистку."""
+        # «Меркурий»: двери проходимы даже в бою (для побега).
+        self.force_open_doors = getattr(player, "doors_stay_open", False)
         # 1) Обновляем каждую сущность.
         for e in list(self.entities):
             e.update(dt, self)
@@ -192,6 +195,10 @@ class Room:
             cap = getattr(player, "_streak_cap", 0.0)
             if cap > 0:
                 player.streak_speed_bonus = min(cap, player.clear_streak * bonus_per)
+        # «USB-флешка»: зачистка комнаты мгновенно снимает кулдаун активки.
+        if getattr(player, "has_usb_charge", False) and getattr(player, "berserk_cd", 0.0) > 0:
+            player.berserk_cd = 0.0
+            fx.spawn_burst(player.x, player.y, (90, 240, 160), n=16, speed=4)
         fx.spawn_burst(cx, cy, (255, 230, 200), n=20, speed=4)
         self._bg_cache = None
 

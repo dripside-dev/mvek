@@ -244,6 +244,15 @@ class Floor:
                     return cls
             return enemy_pool[0][0]
 
+        def scale_hp(enemy):
+            """Масштабировать HP врага множителем сложности этажа, иначе
+            на поздних этажах обычные враги превращаются в «мясо без угрозы»
+            (урон игрока растёт от предметов, а база врага — нет)."""
+            if self.diff_mult > 1.0:
+                enemy.hp = round(enemy.hp * self.diff_mult)
+                enemy.max_hp = enemy.hp
+            return enemy
+
         # ----- Расставляем содержимое в каждой комнате -----
         for room in self.grid.values():
             if room.kind == "start":
@@ -309,10 +318,7 @@ class Floor:
                     x = self.rng.randint(80, ROOM_W - 80)
                     y = self.rng.randint(80, ROOM_H - 80)
                     cls = pick_enemy_cls()
-                    try:
-                        room.entities.append(cls(x, y))
-                    except TypeError:
-                        room.entities.append(cls(x, y))
+                    room.entities.append(scale_hp(cls(x, y)))
                 # Награда заранее лежит в центре, но забрать её можно
                 # только после зачистки волн — комнату не помечаем как
                 # cleared, чтобы двери остались закрытыми.
@@ -355,9 +361,9 @@ class Floor:
                         champ = "blue"
                     cls = pick_enemy_cls()
                     try:
-                        room.entities.append(cls(x, y, champion=champ))
+                        room.entities.append(scale_hp(cls(x, y, champion=champ)))
                     except TypeError:
-                        room.entities.append(cls(x, y))
+                        room.entities.append(scale_hp(cls(x, y)))
 
                 # 60% — добавляем 1-3 парты-препятствия, чтобы не было
                 # пустых открытых полей.

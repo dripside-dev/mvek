@@ -1,11 +1,12 @@
 """HUD: сердечки, ресурсы, инвентарь, активный слот, миникарта, баннеры.
 
-Раскладка элементов (см. README раздел 3 для подробностей):
-  • Сердечки (`_draw_heart`) — слева-сверху поверх комнаты.
+Раскладка — оверлеями поверх игрового поля (нижней полосы нет, поле занимает
+почти весь экран):
+  • Сердечки (`_draw_heart`) — слева-сверху.
   • Ресурсы (монеты/ключи/хлопушки) — вертикальный список под сердцами.
-  • Активный предмет — слева в нижней HUD-полосе со шкалой кулдауна.
-  • Инвентарь пассивов — справа от активного слота.
-  • Миникарта — справа в нижней полосе.
+  • Активный предмет — слева-снизу со шкалой кулдауна.
+  • Инвентарь пассивов — компактные «чипы» вдоль нижнего края.
+  • Миникарта — справа-снизу (полупрозрачная подложка).
   • Всплывающие тексты (`push_floating_text`, `update_floats`,
     `draw_floats`) — глобальный список «летящих» подписей вроде
     «На пересдачу!» / «+5» при попадании / убийстве.
@@ -18,7 +19,7 @@ from __future__ import annotations
 import pygame
 
 from mvek.settings import (
-    SCREEN_W, SCREEN_H, ROOM_H, HUD_H,
+    SCREEN_W, SCREEN_H,
     LOVE_COLOR, LOVE_BACK, SOUL_COLOR, GOLD, WHITE, GRAY, DARK,
     FLOOR_W, FLOOR_H,
 )
@@ -26,6 +27,15 @@ from mvek.settings import (
 
 def _font(size: int, bold: bool = False) -> pygame.font.Font:
     return pygame.font.SysFont("consolas", size, bold=bold)
+
+
+def _overlay_panel(surface, rect, alpha: int = 145,
+                   border=(60, 54, 76)) -> None:
+    """Полупрозрачная тёмная подложка под оверлей HUD (для читаемости)."""
+    panel = pygame.Surface(rect.size, pygame.SRCALPHA)
+    panel.fill((14, 12, 20, alpha))
+    surface.blit(panel, rect.topleft)
+    pygame.draw.rect(surface, border, rect, 1, border_radius=6)
 
 
 # ---------- Pixel-art heart drawing ----------
@@ -63,28 +73,22 @@ def _draw_heart(surface, x, y, fill_frac: float, scale: int = 3,
                          (x + 1 * px, y + 1 * px, px, px))
 
 
-def draw_hud(surface, student, floor, current_room) -> None:
-    """Отрисовать всё HUD-наполнение поверх кадра.
+def draw_hud(surface, student, floor, current_room, crisp=None) -> None:
+    """Отрисовать HUD оверлеями поверх игрового поля (без нижней полосы).
 
-    Раскладка:
-      • Сердечки и счётчики ресурсов — слева-сверху, ПОВЕРХ комнаты,
-        чтобы игрок всегда видел запас жизней без отвода взгляда вниз.
-      • Слот активного предмета и инвентарь пассивов — в нижней
-        тёмной полосе HUD'а.
-      • Миникарта — справа в нижней полосе.
+    ``crisp`` — необязательный слой-оверлей, который НЕ пикселизируется
+    (накладывается поверх кадра уже после пост-эффекта). Сюда уходит мелкая
+    надпись над активным предметом, чтобы её было читать. Если ``crisp`` не
+    передан, текст рисуется прямо на ``surface`` (старое поведение).
     """
+    crisp_dst = crisp if crisp is not None else surface
 
-    # ---------- Нижняя полоса HUD ----------
-    strip = pygame.Rect(0, ROOM_H, SCREEN_W, HUD_H)
-    pygame.draw.rect(surface, DARK, strip)
-    for i in range(4):
-        pygame.draw.line(surface, (60 - i * 10, 50 - i * 10, 70 - i * 10),
-                         (0, ROOM_H + i), (SCREEN_W, ROOM_H + i))
+    # Привязываемся к фактическому размеру кадра, а не к константам 960×720:
+    # в игре кадр может быть шире (под соотношение сторон экрана), и HUD
+    # должен жаться к реальным краям, а не к старой 4:3-рамке.
+    W, H = surface.get_size()
 
     # ---------- Сердечки слева-сверху ----------
-    # При боссе вверху рисуется его HP-бар (x=40..ROOM_W-40), поэтому
-    # сердечки не должны заезжать дальше x≈140. Для этого уменьшен
-    # масштаб (scale=2) и вынесены непосредственно к (12, 8).
     base_x = 12
     base_y = 8
     scale = 2
@@ -97,16 +101,13 @@ def draw_hud(surface, student, floor, current_room) -> None:
         frac = halves / 2.0
         _draw_heart(surface, base_x + i * (heart_w + pad), base_y, frac, scale)
 
-    # Душевные (синие) сердца идут второй строкой, чтобы не конкурировать
-    # за горизонтальное место с обычными.
+    # Душевные (синие) сердца — второй строкой.
     soul_y = base_y + 7 * scale + 3
     for i in range(student.soul):
         _draw_heart(surface, base_x + i * (heart_w + pad), soul_y, 1.0,
                     scale, soul=True)
 
     # ---------- Счётчики ресурсов: вертикальный столбец под сердцами ----------
-    # Раскладка: иконка слева, число справа от иконки.
-    # Порядок сверху вниз: монеты → ключи → хлопушки.
     icon_x = 18
     text_x = 34
     rec_y = (soul_y if student.soul > 0 else base_y) + 7 * scale + 8
@@ -114,8 +115,6 @@ def draw_hud(surface, student, floor, current_room) -> None:
     big_font = _font(15, bold=True)
 
     def _shadow_text(txt, col, x, y):
-        """Отрисовать число с чёрной подложкой, чтобы было читаемо
-        поверх любой стенки/фона комнаты."""
         sh = big_font.render(txt, True, (0, 0, 0))
         surface.blit(sh, (x + 1, y + 1))
         surface.blit(big_font.render(txt, True, col), (x, y))
@@ -151,20 +150,16 @@ def draw_hud(surface, student, floor, current_room) -> None:
                        (icon_x + 3, cy - 2), 1)
     _shadow_text(f"{student.bombs}", (220, 220, 220), text_x, cy)
 
-    # Active item slot — placed on the LEFT edge of the HUD strip.
-    # The cooldown is rendered as a vertical fill bar to the left of the
-    # slot so the player always knows when SPACE will fire next.
-    slot_rect = pygame.Rect(8, ROOM_H + 4, 56, 56)
-    pygame.draw.rect(surface, (16, 14, 22), slot_rect.inflate(6, 6),
-                     border_radius=8)
+    # ---------- Активный предмет: слева-снизу ----------
+    slot = 50
+    slot_rect = pygame.Rect(16, H - slot - 14, slot, slot)
+    _overlay_panel(surface, slot_rect.inflate(12, 12), alpha=150)
     pygame.draw.rect(surface, (40, 36, 52), slot_rect, border_radius=6)
     pygame.draw.rect(surface, WHITE, slot_rect, 2, border_radius=6)
 
-    # Vertical cooldown bar to the LEFT of the slot
-    bar_rect = pygame.Rect(slot_rect.right + 4, slot_rect.top, 6,
+    # Шкала кулдауна — узкой вертикальной полосой справа от слота.
+    bar_rect = pygame.Rect(slot_rect.right + 5, slot_rect.top, 6,
                            slot_rect.height)
-    pygame.draw.rect(surface, (16, 14, 22), bar_rect.inflate(2, 2),
-                     border_radius=2)
     pygame.draw.rect(surface, (30, 26, 40), bar_rect, border_radius=2)
 
     if student.active_item:
@@ -190,7 +185,7 @@ def draw_hud(surface, student, floor, current_room) -> None:
                                (slot_rect.centerx - 4, slot_rect.centery - 4), 3)
             pygame.draw.circle(surface, (20, 20, 25), slot_rect.center, 16, 2)
 
-        # Greyscale overlay while item is on cooldown
+        # Затемнение слота, пока предмет на кулдауне.
         max_cd = max(0.001, getattr(student, "berserk_cd_max", 30.0))
         cd_frac = min(1.0, max(0.0, student.berserk_cd / max_cd))
         if cd_frac > 0:
@@ -198,64 +193,52 @@ def draw_hud(surface, student, floor, current_room) -> None:
             shade.fill((0, 0, 0, int(180 * cd_frac)))
             surface.blit(shade, slot_rect.topleft)
 
-        # Fill bar: empty when on cooldown, full when ready
+        # Заполнение шкалы: пусто на кулдауне, полно — когда готов.
         fill_h = int(bar_rect.height * (1.0 - cd_frac))
         fill_col = (90, 240, 160) if cd_frac == 0 else (220, 180, 60)
         pygame.draw.rect(surface, fill_col,
                          (bar_rect.left, bar_rect.bottom - fill_h,
                           bar_rect.width, fill_h), border_radius=2)
-        pygame.draw.rect(surface, (60, 54, 76), bar_rect, 1,
-                         border_radius=2)
+        pygame.draw.rect(surface, (60, 54, 76), bar_rect, 1, border_radius=2)
 
-        # "READY" or countdown text
+        # Имя предмета и состояние — НАД слотом (под слотом нет места).
+        # Рисуем в чёткий слой (crisp_dst), чтобы мелкий текст не пикселизировался.
+        nm = _font(9, bold=True).render(student.active_item[:18], True, WHITE)
+        crisp_dst.blit(nm, (slot_rect.left, slot_rect.top - 27))
         if cd_frac == 0:
             t = _font(9, bold=True).render("ПРОБЕЛ", True, (90, 240, 160))
         else:
             t = _font(9, bold=True).render(f"{student.berserk_cd:0.1f}",
                                            True, (220, 180, 60))
-        surface.blit(t, (slot_rect.centerx - t.get_width() // 2,
-                         slot_rect.bottom + 2))
-
-        # Item name above the slot
-        nm = _font(9, bold=True).render(student.active_item[:18], True, WHITE)
-        surface.blit(nm, (slot_rect.left,
-                          slot_rect.bottom + 14))
+        crisp_dst.blit(t, (slot_rect.left, slot_rect.top - 14))
     else:
         t = _font(9).render("слот пуст", True, (140, 130, 160))
-        surface.blit(t, (slot_rect.centerx - t.get_width() // 2,
-                         slot_rect.bottom + 4))
+        crisp_dst.blit(t, (slot_rect.centerx - t.get_width() // 2,
+                           slot_rect.top - 14))
 
-    # Passives inventory — moved further right so it does not overlap
-    # the relocated active slot.
-   # Passives inventory — moved further right so it does not overlap
-    # the relocated active slot.
-    inv_x = slot_rect.right + 36
-    inv_y = ROOM_H + 4
-    inv_t = _font(11, bold=True).render("ИНВЕНТАРЬ:", True, WHITE)
-    surface.blit(inv_t, (inv_x, inv_y))
-    from mvek.items.items import ITEMS_BY_NAME, paint_icon
-    start_x = 20
-    start_y = surface.get_height() - 45
-    icon_size = 14
-    spacing = 5
-    items_per_row = 15
-
+    # ---------- Пассивный инвентарь: «чипы» вдоль нижнего края ----------
     if student.passives:
-        f_inv = pygame.font.SysFont("consolas", 11, bold=True)
-        inv_lbl = f_inv.render("ITEMS:", True, (130, 120, 110))
-        surface.blit(inv_lbl, (start_x, start_y - 14))
-
+        from mvek.items.items import ITEMS_BY_NAME, paint_icon
         from mvek import assets
         inv_icon = 18
+        spacing = 5
+        per_row = 24
+        x0 = slot_rect.right + 28
+        y0 = H - inv_icon - 14
         for idx, ite in enumerate(student.passives):
-            row = idx // items_per_row
-            col = idx % items_per_row
+            row = idx // per_row
+            col = idx % per_row
+            x = x0 + col * (inv_icon + spacing)
+            y = y0 - row * (inv_icon + spacing)
+            # Полупрозрачный чип-фон под каждым предметом.
+            chip = pygame.Rect(x - 2, y - 2, inv_icon + 4, inv_icon + 4)
+            chip_bg = pygame.Surface(chip.size, pygame.SRCALPHA)
+            chip_bg.fill((14, 12, 20, 150))
+            surface.blit(chip_bg, chip.topleft)
+            pygame.draw.rect(surface, (60, 54, 76), chip, 1, border_radius=3)
 
-            x = start_x + col * (inv_icon + spacing)
-            y = start_y + row * (inv_icon + spacing)
             center_x = x + inv_icon // 2
             center_y = y + inv_icon // 2
-
             item = ITEMS_BY_NAME.get(ite)
             drawn = False
             if item is not None:
@@ -271,8 +254,6 @@ def draw_hud(surface, student, floor, current_room) -> None:
                 my_color = ((h & 0xFF) % 155 + 100,
                             ((h >> 8) & 0xFF) % 155 + 100,
                             ((h >> 16) & 0xFF) % 155 + 100)
-                pygame.draw.circle(surface, (15, 10, 10),
-                                   (center_x + 1, center_y + 1), inv_icon // 2)
                 pygame.draw.circle(surface, my_color,
                                    (center_x, center_y), inv_icon // 2)
                 pygame.draw.circle(surface, (30, 25, 25),
@@ -282,18 +263,18 @@ def draw_hud(surface, student, floor, current_room) -> None:
 
 
 def draw_minimap(surface, floor, current_room, revealed: bool) -> None:
-    cell = 14
+    cell = 11
     pad = 2
+    W, H = surface.get_size()
     map_w = FLOOR_W * cell
     map_h = FLOOR_H * cell
-    ox = SCREEN_W - map_w - 16
-    oy = ROOM_H + 12
+    ox = W - map_w - 16
+    oy = H - map_h - 16
     frame = pygame.Rect(ox - 6, oy - 6, map_w + 12, map_h + 12)
-    pygame.draw.rect(surface, (16, 14, 22), frame, border_radius=6)
-    pygame.draw.rect(surface, (60, 54, 76), frame, 2, border_radius=6)
-    f = _font(9, bold=True)
-    surface.blit(f.render("МИНИКАРТА", True, WHITE),
-                 (ox - 4, oy + map_h + 6))
+    panel = pygame.Surface(frame.size, pygame.SRCALPHA)
+    panel.fill((14, 12, 20, 165))
+    surface.blit(panel, frame.topleft)
+    pygame.draw.rect(surface, (60, 54, 76), frame, 1, border_radius=6)
     for (gx, gy), room in floor.grid.items():
         rx = ox + gx * cell
         ry = oy + gy * cell
@@ -342,15 +323,16 @@ def _is_adjacent_to_visited(floor, gx: int, gy: int) -> bool:
 
 
 def draw_center_text(surface, lines, color=WHITE) -> None:
+    W, H = surface.get_size()
     f_big = _font(48, bold=True)
     f_small = _font(20)
-    y = SCREEN_H // 2 - len(lines) * 30
+    y = H // 2 - len(lines) * 30
     for i, line in enumerate(lines):
         font = f_big if i == 0 else f_small
         sh = font.render(line, True, (0, 0, 0))
-        surface.blit(sh, (SCREEN_W // 2 - sh.get_width() // 2 + 2, y + 2))
+        surface.blit(sh, (W // 2 - sh.get_width() // 2 + 2, y + 2))
         t = font.render(line, True, color)
-        surface.blit(t, (SCREEN_W // 2 - t.get_width() // 2, y))
+        surface.blit(t, (W // 2 - t.get_width() // 2, y))
         y += t.get_height() + 6
 
 
@@ -362,6 +344,7 @@ def draw_pickup_popup(surface, name: str, flavor: str, t: float) -> None:
     """
     if t <= 0:
         return
+    W, H = surface.get_size()
     alpha = max(0, min(255, int(255 * min(1.0, t * 1.4))))
     f_big = _font(28, bold=True)
     f_sm = _font(14)
@@ -374,14 +357,14 @@ def draw_pickup_popup(surface, name: str, flavor: str, t: float) -> None:
     sh2 = pygame.Surface(sh.get_size(), pygame.SRCALPHA)
     sh2.blit(sh, (0, 0))
     sh2.set_alpha(alpha)
-    surface.blit(sh2, (SCREEN_W // 2 - big.get_width() // 2 + 2, y + 2))
-    surface.blit(s2, (SCREEN_W // 2 - big.get_width() // 2, y))
+    surface.blit(sh2, (W // 2 - big.get_width() // 2 + 2, y + 2))
+    surface.blit(s2, (W // 2 - big.get_width() // 2, y))
     if flavor:
         small = f_sm.render(flavor, True, (240, 220, 180))
         s3 = pygame.Surface(small.get_size(), pygame.SRCALPHA)
         s3.blit(small, (0, 0))
         s3.set_alpha(alpha)
-        surface.blit(s3, (SCREEN_W // 2 - small.get_width() // 2,
+        surface.blit(s3, (W // 2 - small.get_width() // 2,
                           y + big.get_height() + 4))
 
 
@@ -390,13 +373,14 @@ def draw_floor_banner(surface, label: str, t: float) -> None:
     """Wide black ink-mark banner on entry; t in seconds remaining."""
     if t <= 0:
         return
+    W, H = surface.get_size()
     alpha = int(255 * min(1.0, t * 1.5))
     h = 70
-    band = pygame.Surface((SCREEN_W, h), pygame.SRCALPHA)
-    pygame.draw.rect(band, (10, 8, 14, alpha), (0, 8, SCREEN_W, h - 16))
+    band = pygame.Surface((W, h), pygame.SRCALPHA)
+    pygame.draw.rect(band, (10, 8, 14, alpha), (0, 8, W, h - 16))
     import random
     rng = random.Random(int(label.__hash__()) & 0xFFFF)
-    for x in range(0, SCREEN_W, 8):
+    for x in range(0, W, 8):
         pygame.draw.polygon(band,
                             (10, 8, 14, alpha),
                             [(x, 8 - rng.randint(0, 8)),
@@ -410,7 +394,7 @@ def draw_floor_banner(surface, label: str, t: float) -> None:
     f = _font(34, bold=True)
     t_surf = f.render(label, True, (245, 240, 230))
     t_surf.set_alpha(alpha)
-    band.blit(t_surf, (SCREEN_W // 2 - t_surf.get_width() // 2,
+    band.blit(t_surf, (W // 2 - t_surf.get_width() // 2,
                        (h - t_surf.get_height()) // 2))
     surface.blit(band, (0, 100))
 

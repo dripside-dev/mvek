@@ -1,0 +1,213 @@
+{
+  "wins": {},
+  "unlocked": [],
+  "slots": [
+    null,
+    {
+      "char": "vlad",
+      "char_name": "ВЛАД",
+      "difficulty": 0,
+      "level": 1,
+      "seed": 527888474,
+      "cleared": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ]
+      ],
+      "visited": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "locked": {
+        "4,5": [
+          "E"
+        ],
+        "5,5": [
+          "W"
+        ],
+        "3,7": [
+          "W"
+        ],
+        "2,6": [
+          "S"
+        ],
+        "1,6": [
+          "S"
+        ],
+        "2,8": [
+          "N"
+        ],
+        "1,7": [
+          "N",
+          "E"
+        ],
+        "2,7": [
+          "N",
+          "S",
+          "W",
+          "E"
+        ]
+      },
+      "current": [
+        4,
+        5
+      ],
+      "player": {
+        "speed": 3.1,
+        "damage": 0.9,
+        "fire_rate": 2.9,
+        "shot_speed": 7.0,
+        "shot_range": 360,
+        "luck": 3,
+        "max_love": 6,
+        "love": 6,
+        "soul": 0,
+        "coins": 25,
+        "bombs": 1,
+        "keys": 2,
+        "flying": false,
+        "homing": true,
+        "golden_tears": false,
+        "map_revealed": false,
+        "passives": [
+          "Ноутбук",
+          "Студенческий Wi-Fi"
+        ],
+        "active_item": null,
+        "x": 397.1910353387733,
+        "y": 233.77474387515846
+      }
+    },
+    {
+      "char": "platon",
+      "char_name": "ПЛАТОН",
+      "difficulty": 0,
+      "level": 1,
+      "seed": 168623910,
+      "cleared": [
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          7,
+          7
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "visited": [
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "locked": {
+        "4,4": [
+          "N"
+        ],
+        "3,4": [
+          "N"
+        ],
+        "5,4": [
+          "N"
+        ],
+        "3,3": [
+          "S",
+          "E"
+        ],
+        "5,3": [
+          "S",
+          "W"
+        ],
+        "4,3": [
+          "S",
+          "W",
+          "E"
+        ]
+      },
+      "current": [
+        3,
+        4
+      ],
+      "player": {
+        "speed": 2.6,
+        "damage": 0.8,
+        "fire_rate": 2.0,
+        "shot_speed": 7.0,
+        "shot_range": 360,
+        "luck": 0,
+        "max_love": 4,
+        "love": 4,
+        "soul": 0,
+        "coins": 0,
+        "bombs": 1,
+        "keys": 1,
+        "flying": false,
+        "homing": false,
+        "golden_tears": false,
+        "map_revealed": false,
+        "passives": [],
+        "active_item": null,
+        "x": 466.4950024314846,
+        "y": 73.78537873138944
+      }
+    }
+  ],
+  "settings": {
+    "music_volume": 0.6,
+    "music_on": true,
+    "fullscreen": true,
+    "difficulty": 0,
+    "window_size": 5
+  }
+}

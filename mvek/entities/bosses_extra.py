@@ -73,7 +73,9 @@ class _BossBase(Entity):
     def _draw_hp_bar(self, surface, ox, oy) -> None:
         bar_w = ROOM_W - 80
         bx = ox + 40
-        by = oy + 8
+        # Опускаем полосу вниз, чтобы подпись (над полосой, by-18) не уезжала
+        # за верхний край комнаты.
+        by = oy + 26
         pygame.draw.rect(surface, (0, 0, 0), (bx - 2, by - 2, bar_w + 4, 18))
         pygame.draw.rect(surface, (40, 20, 25), (bx, by, bar_w, 14))
         frac = max(0.0, self.hp / self.max_hp)

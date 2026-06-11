@@ -295,7 +295,10 @@ class Janitor(_MiniBase):
                 new.append((px, py, life))
                 if (player.x - px) ** 2 + (player.y - py) ** 2 < 28 * 28:
                     player.duschnit_t = 0.4
-                    if not player.is_invulnerable and random.random() < 0.02:
+                    # Урон от лужи — масштабируем по dt, иначе шанс зависит
+                    # от FPS (0.02/кадр ≈ 1.2/сек при 60 FPS). i-frames игрока
+                    # дополнительно ограничивают частоту попаданий.
+                    if not player.is_invulnerable and random.random() < 1.2 * dt:
                         player.take_damage(1)
         self.puddles = new
         self._contact_damage(room)

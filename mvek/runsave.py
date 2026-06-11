@@ -107,10 +107,21 @@ def restore(game, snap: dict) -> bool:
                 ]
                 room._bg_cache = None
             key = f"{gx},{gy}"
-            if key in locked:
-                for d in locked[key]:
-                    if d in room.locked:
-                        room.locked[d] = True
+            # Применяем сохранённое состояние замков АВТОРИТЕТНО: этаж
+            # пересоздан из seed и все «запертые» двери снова True по
+            # умолчанию. Двери, которые игрок уже отпер ключом, в снимок не
+            # попадают (там только ещё-запертые), поэтому без сброса в False
+            # они «защёлкивались» заново — и без ключа из комнаты было не
+            # выйти. Ставим True только дверям из снимка, остальным — False.
+            ld = set(locked.get(key, []))
+            changed = False
+            for d in room.locked:
+                want = d in ld
+                if room.locked[d] != want:
+                    room.locked[d] = want
+                    changed = True
+            if changed:
+                room._bg_cache = None
 
         # Игрок: создаём по классу, затем перезаписываем снимком статов.
         p = snap["player"]

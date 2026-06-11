@@ -555,11 +555,11 @@ def _candle(s):    s._streak_cap = 2.0
 def _revive(s):    s.has_revive = True
 def _familiar(s):  s.has_familiar = True
 def _milk(s):
-    s.speed *= 4.0
-    s.damage *= 0.34
+    s.speed *= 1.8
+    s.damage *= 0.6
 def _melee(s):
     s.melee_mode = True
-    s.damage *= 3.0
+    s.damage *= 2.0
 
 
 # ===========================================================================
@@ -598,8 +598,8 @@ ITEM_REGISTRY: list[dict] = [
              (90, 130, 90), apply=lambda s: s.add_soul(2),
              icon=ICONS["gradebook"], tag="bookworm",
              flavor="SOUL HEARTS!"),
-    _passive("Стипендия", "+99 рублей.", (240, 200, 80),
-             apply=lambda s: setattr(s, "coins", s.coins + 99),
+    _passive("Стипендия", "+30 рублей.", (240, 200, 80),
+             apply=lambda s: setattr(s, "coins", s.coins + 30),
              icon=ICONS["money_stack"],
              flavor="MONEY UP!"),
     _passive("Очки ботаника", "Доклады наводятся на врагов.",
@@ -685,12 +685,12 @@ ITEM_REGISTRY: list[dict] = [
              icon=ICONS["deans_seal"],
              flavor="STATS LOCKED"),
     _passive("Указка преподавателя",
-             "Доклады заменяются на удар указкой ×3 урона.",
+             "Доклады заменяются на удар указкой ×2 урона.",
              (200, 180, 140), apply=_melee,
              icon=ICONS["teacher_pointer"],
-             flavor="MELEE x3"),
+             flavor="MELEE x2"),
     _passive("Молочный коктейль",
-             "×4 скорости, ×0.34 урон.", (240, 240, 220),
+             "×1.8 скорости, ×0.6 урон.", (240, 240, 220),
              apply=_milk, icon=ICONS["milk_carton"],
              flavor="SPEED x4 / DMG DOWN"),
     _passive("Помощник-первокурсник",
@@ -779,13 +779,17 @@ ITEM_REGISTRY: list[dict] = [
              icon=ICONS["sport_dumbbell"], tag="athlete",
              flavor="DMG UP!"),
     _passive("Свисток тренера",
-             "Урон в радиусе при получении урона.", (200, 200, 80),
-             apply=lambda s: setattr(s, "has_whistle", True),
+             "+0.5 урона. При получении удара бьёт всех врагов рядом.", (200, 200, 80),
+             apply=lambda s: (
+                 setattr(s, "damage", s.damage + 0.5),
+                 setattr(s, "has_whistle", True)),
              icon=ICONS["sport_whistle"], tag="athlete",
              flavor="REVENGE!"),
     _passive("Футбольный мяч",
-             "Снаряд раз в 3с — рикошет.", (240, 240, 240),
-             apply=lambda s: setattr(s, "has_ricochet", True),
+             "+0.4 скорости. Снаряды рикошетят от стен 1 раз.", (240, 240, 240),
+             apply=lambda s: (
+                 setattr(s, "speed", s.speed + 0.4),
+                 setattr(s, "has_ricochet", True)),
              icon=ICONS["sport_ball"], tag="athlete",
              flavor="EXTRA SHOT!"),
 
@@ -821,9 +825,11 @@ ITEM_REGISTRY: list[dict] = [
 
     # ===== NEW transformation set: ХАКЕР =====
     _passive("USB-флешка",
-             "Активный предмет заряжается на 1 заряд за комнату.",
+             "+1 удача. Зачистка комнаты мгновенно снимает кулдаун активки.",
              (60, 60, 80),
-             apply=lambda s: setattr(s, "has_usb_charge", True),
+             apply=lambda s: (
+                 setattr(s, "luck", s.luck + 1),
+                 setattr(s, "has_usb_charge", True)),
              icon=ICONS["usb_stick"], tag="hacker",
              flavor="ACTIVE CHARGE!"),
     _passive("Ноутбук",
@@ -855,8 +861,12 @@ ITEM_REGISTRY: list[dict] = [
 
     # ===== NEW transformation set: АРТИСТ =====
     _passive("Кисть",
-             "Доклады оставляют разноцветный след.", (140, 90, 50),
-             apply=lambda s: setattr(s, "rainbow_trail", True),
+             "+0.3 урона, +60 дальность снарядов, разноцветный след.",
+             (140, 90, 50),
+             apply=lambda s: (
+                 setattr(s, "damage", s.damage + 0.3),
+                 setattr(s, "shot_range", s.shot_range + 60),
+                 setattr(s, "rainbow_trail", True)),
              icon=ICONS["paint_brush"], tag="artist",
              flavor="STYLE UP!"),
     _passive("Палитра",
@@ -877,8 +887,10 @@ ITEM_REGISTRY: list[dict] = [
              icon=ICONS["camera"], tag="artist",
              flavor="MAP UP!"),
     _passive("Театральная маска",
-             "Враги первые 1.5с в комнате не видят.", (240, 240, 220),
-             apply=lambda s: setattr(s, "has_camo", True),
+             "+0.4 скорости. При входе в комнату 1.5с невидимости для врагов.", (240, 240, 220),
+             apply=lambda s: (
+                 setattr(s, "speed", s.speed + 0.4),
+                 setattr(s, "has_camo", True)),
              icon=ICONS["stage_mask"], tag="artist",
              flavor="CAMO!"),
 ]
@@ -1105,10 +1117,14 @@ class ItemPickup(Entity):
             student.coins -= self.price
         item = self.item
         if item["kind"] == "passive":
-            if item["apply"] is not None:
-                item["apply"](student)
-            student.passives.append(item["name"])
-            check_transformations(student)
+            # Дубль того же пассива НЕ применяем повторно: иначе
+            # мультипликативные эффекты (×4 скорость, ×3 урон) стакаются
+            # экспоненциально. Предмет «забирается», но эффект — один раз.
+            if item["name"] not in student.passives:
+                if item["apply"] is not None:
+                    item["apply"](student)
+                student.passives.append(item["name"])
+                check_transformations(student)
         else:
             student.active_item = item["name"]
         if hasattr(student, "on_pickup"):

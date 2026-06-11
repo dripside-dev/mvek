@@ -25,6 +25,21 @@ from mvek.entities.projectile import make_critique, make_ticket
 from mvek import fx, sounds
 
 
+def find_target_player(room):
+    """Вернуть игрока как цель для ИИ врага, либо None.
+
+    None — если игрок невидим из-за камуфляжа («Театральная маска»):
+    пока ``camo_t`` > 0, враги не наводятся и не стреляют по нему.
+    """
+    from mvek.entities.student import Student
+    s = next((e for e in room.entities if isinstance(e, Student)), None)
+    if s is None:
+        return None
+    if getattr(s, "camo_t", 0.0) > 0:
+        return None
+    return s
+
+
 # =================== Звуковая волна (визуальное кольцо) ===================
 
 class StunRing(Entity):
@@ -174,15 +189,49 @@ class Enemy(Entity):
         dx = px - self.x
         dy = py - self.y
         dl = math.hypot(dx, dy) or 1
-        nx = self.x + (dx / dl) * self.speed
-        ny = self.y + (dy / dl) * self.speed
+        vx = (dx / dl) * self.speed
+        vy = (dy / dl) * self.speed
+
         from mvek.entities.pickups import Obstacle
+        for o in room.entities:
+            if not (isinstance(o, Obstacle) and not o.dead):
+                continue
+            ddx = self.x - o.x
+            ddy = self.y - o.y
+            rr = o.radius + self.radius
+            d2 = ddx * ddx + ddy * ddy
+            if d2 < rr * rr:
+                # Уже ВНУТРИ парты — выталкиваем наружу, иначе шаг к игроку
+                # оставляет врага в препятствии и оба направления заперты.
+                d = math.sqrt(d2) or 1
+                vx += (ddx / d) * self.speed
+                vy += (ddy / d) * self.speed
+            elif d2 < (rr + self.speed + 6) ** 2:
+                # Парта прямо по курсу — добавляем касательный объезд, чтобы
+                # враг не утыкался в неё лоб в лоб и обходил сбоку.
+                d = math.sqrt(d2) or 1
+                # перпендикуляр к направлению на игрока; выбираем сторону,
+                # которая уводит от центра парты
+                if (-dy) * ddx + dx * ddy >= 0:
+                    tx, ty = -dy / dl, dx / dl
+                else:
+                    tx, ty = dy / dl, -dx / dl
+                vx += tx * self.speed
+                vy += ty * self.speed
+
+        nx = self.x + vx
+        ny = self.y + vy
         blocked_x = blocked_y = False
         for o in room.entities:
             if isinstance(o, Obstacle) and not o.dead:
-                if (o.x - nx) ** 2 + (o.y - self.y) ** 2 < (o.radius + self.radius) ** 2:
+                rr2 = (o.radius + self.radius) ** 2
+                # Блокируем ось, только если она УВОДИТ глубже в парту (новое
+                # перекрытие сильнее текущего) — так выталкивание не отменяется.
+                if ((o.x - nx) ** 2 + (o.y - self.y) ** 2 < rr2 and
+                        (o.x - nx) ** 2 < (o.x - self.x) ** 2):
                     blocked_x = True
-                if (o.x - self.x) ** 2 + (o.y - ny) ** 2 < (o.radius + self.radius) ** 2:
+                if ((o.x - self.x) ** 2 + (o.y - ny) ** 2 < rr2 and
+                        (o.y - ny) ** 2 < (o.y - self.y) ** 2):
                     blocked_y = True
         if not room.is_wall(nx, self.y) and not blocked_x:
             self.x = nx
@@ -228,9 +277,9 @@ class Tutor(Enemy):
         self.radius = 12
 
     def update(self, dt, room):
-        from mvek.entities.student import Student
-        player = next((e for e in room.entities if isinstance(e, Student)), None)
+        player = find_target_player(room)
         if player is None:
+            self._hit_flash = max(0.0, self._hit_flash - 1.0 / FPS)
             return
         self._apply_magnet_pull(room)
         if self._tick_status():
@@ -315,9 +364,9 @@ class Teacher(Enemy):
         self._wave_cd = random.uniform(4.0, 7.0)
 
     def update(self, dt, room):
-        from mvek.entities.student import Student
-        player = next((e for e in room.entities if isinstance(e, Student)), None)
+        player = find_target_player(room)
         if player is None:
+            self._hit_flash = max(0.0, self._hit_flash - 1.0 / FPS)
             return
         self._apply_magnet_pull(room)
         if self._tick_status():

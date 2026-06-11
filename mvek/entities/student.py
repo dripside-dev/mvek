@@ -92,7 +92,7 @@ STA_SHIRT_DARK = (40, 40, 50)
 #   unlock_wins   — сколько побед нужно набрать тем персонажем.
 CHARACTERS = {
     "platon": {
-        "name": "ПЛАТОН",
+        "name": "Платон",
         "descr": "Задрот-первокурсник: худшие статы, слабый и хилый",
         "max_love": 4, "speed": 2.6, "damage": 0.8,
         "fire_rate": 2.0, "luck": 0, "soul": 0,
@@ -100,7 +100,7 @@ CHARACTERS = {
         "sprite": "platon",
     },
     "kiryuha": {
-        "name": "КИРЮХА",
+        "name": "Кирилл",
         "descr": "Хмурый: бьёт больно, но реже",
         "max_love": 8, "speed": 2.8, "damage": 1.6,
         "fire_rate": 2.0, "luck": 0, "soul": 0,
@@ -108,15 +108,15 @@ CHARACTERS = {
         "sprite": "kiryuha",
     },
     "nataha": {
-        "name": "НАТАХА",
+        "name": "Наташа",
         "descr": "Лёгкая и быстрая, скорострельная",
         "max_love": 6, "speed": 3.4, "damage": 0.9,
         "fire_rate": 3.0, "luck": 1, "soul": 0,
-        "starts_with": [],
+        "starts_with": ["Звезда отличника"],
         "sprite": "nataha",
     },
     "nikitos1": {
-        "name": "НИКИТОС I",
+        "name": "Никита 1",
         "descr": "Первый разработчик: с энергетиком наготове",
         "max_love": 6, "speed": 3.0, "damage": 1.0,
         "fire_rate": 2.5, "luck": 0, "soul": 0,
@@ -124,20 +124,37 @@ CHARACTERS = {
         "sprite": "nikitos1",
     },
     "nikitos2": {
-        "name": "НИКИТОС II",
-        "descr": "Второй разработчик: крепкий и удачливый",
+        "name": "Никита 2",
+        "descr": "Второй разработчик: крепкий, удачливый, с фамильяром",
         "max_love": 8, "speed": 3.0, "damage": 1.1,
         "fire_rate": 2.4, "luck": 1, "soul": 0,
+        "familiar": True,
         "starts_with": [],
         "sprite": "nikitos2",
     },
     "anka": {
-        "name": "АНЬКА",
+        "name": "Аня",
         "descr": "Реклама: +2 синих сердца, удача",
         "max_love": 6, "speed": 3.1, "damage": 1.0,
         "fire_rate": 2.7, "luck": 2, "soul": 2,
         "starts_with": [],
         "sprite": "anka",
+    },
+    "zlata": {
+        "name": "Злата",
+        "descr": "Сбалансированная: со стартовой кистью",
+        "max_love": 6, "speed": 3.0, "damage": 1.0,
+        "fire_rate": 2.5, "luck": 1, "soul": 0,
+        "starts_with": ["Кисть"],
+        "sprite": "zlata",
+    },
+    "vlad": {
+        "name": "Влад",
+        "descr": "Третий разработчик: код сам наводится на цель",
+        "max_love": 6, "speed": 3.1, "damage": 0.9,
+        "fire_rate": 2.6, "luck": 2, "soul": 0,
+        "starts_with": ["Ноутбук", "Студенческий Wi-Fi"],
+        "sprite": "vlad",
     },
     # ----- Скрытые проклятые персонажи -----
     "cursed_cupsize": {
@@ -149,16 +166,6 @@ CHARACTERS = {
         "starts_with": [],
         "sprite": "cursed_cupsize",
         "locked": True, "unlock_by": "platon", "unlock_wins": 3,
-    },
-    "cursed_zupsize": {
-        "name": "CURSED ZUPSIZE ПЛАТОН",
-        "descr": "Истинная форма: автонаводка, макс. хп, под ЗППП на репите",
-        "max_love": 12, "speed": 3.6, "damage": 2.2,
-        "fire_rate": 3.2, "luck": 4, "soul": 0,
-        "homing": True,
-        "starts_with": [],
-        "sprite": "cursed_zupsize",
-        "locked": True, "unlock_by": "cursed_cupsize", "unlock_wins": 3,
     },
 }
 
@@ -235,19 +242,6 @@ class Student(Entity):
         self.passives: list[str] = []
         self.active_item: str | None = None
 
-        # Apply starting items from the character profile
-        from mvek.items.items import ITEMS_BY_NAME
-        for it_name in CHARACTERS[self.character].get("starts_with", []):
-            it = ITEMS_BY_NAME.get(it_name)
-            if it is None:
-                continue
-            if it["kind"] == "passive":
-                if it["apply"] is not None:
-                    it["apply"](self)
-                self.passives.append(it["name"])
-            else:
-                self.active_item = it["name"]
-
         # Velocity (for inertia)
         self.vx = 0.0
         self.vy = 0.0
@@ -306,7 +300,20 @@ class Student(Entity):
         self.melee_mode: bool = False
         self.melee_swing_t: float = 0.0
         # Friendly helper familiar that auto-shoots at enemies.
-        self.has_familiar: bool = False
+        self.has_familiar: bool = bool(prof.get("familiar", False))
+        self._familiar_cd: float = 0.0     # shot cooldown for the familiar
+        self._familiar_angle: float = 0.0  # bob/orbit phase for drawing
+        # Passive health regeneration («Звезда отличника»).
+        self.has_regen: bool = False
+        self.regen_t: float = 0.0
+        # --- ранее «TODO»-механики предметов ---
+        self.has_whistle: bool = False     # радиальная месть при уроне
+        self.has_ricochet: bool = False    # доклад отскакивает от стены
+        self.has_usb_charge: bool = False  # зачистка комнаты снимает кд активки
+        self.rainbow_trail: bool = False   # радужный след докладов
+        self.has_camo: bool = False        # камуфляж при входе в комнату
+        self.camo_t: float = 0.0           # активный таймер камуфляжа
+        self.doors_stay_open: bool = False # двери зачищенных комнат не закрываются
         # Once-per-floor revive (Каменное Дно alt).
         self.has_revive: bool = False
         # "Сатурн"-style orbit angle (shared between visuals).
@@ -315,6 +322,21 @@ class Student(Entity):
         # Pickup animation
         self._pickup_t = 0.0
         self._pickup_color = (255, 255, 255)
+
+        # Apply starting items from the character profile. Done LAST so the
+        # item apply() callbacks run after every mechanic flag is initialized
+        # (otherwise the flag defaults above would clobber the item's effect).
+        from mvek.items.items import ITEMS_BY_NAME
+        for it_name in CHARACTERS[self.character].get("starts_with", []):
+            it = ITEMS_BY_NAME.get(it_name)
+            if it is None:
+                continue
+            if it["kind"] == "passive":
+                if it["apply"] is not None:
+                    it["apply"](self)
+                self.passives.append(it["name"])
+            else:
+                self.active_item = it["name"]
 
     # -------- helpers --------
     @property
@@ -367,6 +389,23 @@ class Student(Entity):
         fx.spawn_burst(self.x, self.y, (235, 70, 110), n=14, speed=3.5)
         sounds.play("hit")
 
+        # «Свисток тренера»: при получении урона — радиальная месть по
+        # врагам в радиусе (REVENGE). Урон масштабируется от твоего.
+        if self.has_whistle:
+            room = getattr(self, "_last_room", None)
+            if room is not None:
+                from mvek.entities.enemy import Enemy
+                radius = 90
+                dmg = max(1.0, self.damage * 1.5)
+                for e in list(room.entities):
+                    if (isinstance(e, Enemy) or getattr(e, "is_boss", False)) and not e.dead:
+                        if (e.x - self.x) ** 2 + (e.y - self.y) ** 2 <= radius * radius:
+                            e.take_damage(dmg)
+                ring = (255, 230, 90)
+                fx.flash(ring, 0.15)
+                fx.spawn_burst(self.x, self.y, ring, n=24, speed=5)
+                sounds.play("phase")
+
     def heal(self, amount: int) -> None:
         self.love = min(self.max_love, self.love + amount)
         fx.spawn_burst(self.x, self.y - 6, (235, 70, 110), n=8, speed=1.6)
@@ -387,11 +426,26 @@ class Student(Entity):
     # -------- update --------
     def update(self, dt: float, room) -> None:
         self._last_room = room
+        # «Печать декана»: статы не могут опускаться ниже зафиксированных
+        # значений (повышения по-прежнему применяются — берём max).
+        if self.stat_lock:
+            if self._locked_speed is not None:
+                self.speed = max(self.speed, self._locked_speed)
+            if self._locked_damage is not None:
+                self.damage = max(self.damage, self._locked_damage)
+            if self._locked_fire_rate is not None:
+                self.fire_rate = max(self.fire_rate, self._locked_fire_rate)
         keys = pygame.key.get_pressed()
+        scan = getattr(self, "_scan_held", None) or set()
+
+        def _held(keysym, kscan):
+            # Раскладко-независимо: либо keysym (англ. раскладка), либо
+            # физический scancode (работает и на русской раскладке).
+            return 1 if (keys[keysym] or kscan in scan) else 0
 
         # --- Input -> acceleration ---
-        ix = (keys[pygame.K_d] - keys[pygame.K_a])
-        iy = (keys[pygame.K_s] - keys[pygame.K_w])
+        ix = _held(pygame.K_d, pygame.KSCAN_D) - _held(pygame.K_a, pygame.KSCAN_A)
+        iy = _held(pygame.K_s, pygame.KSCAN_S) - _held(pygame.K_w, pygame.KSCAN_W)
         if ix or iy:
             il = math.hypot(ix, iy) or 1
             ix /= il
@@ -471,6 +525,8 @@ class Student(Entity):
             self.slow_t -= 1.0 / FPS
         if self.berserk_cd > 0:
             self.berserk_cd -= 1.0 / FPS
+        if self.camo_t > 0:
+            self.camo_t = max(0.0, self.camo_t - 1.0 / FPS)
 
         # --- Pickup magnet: pull nearby coins/keys/hearts/bombs in ---
         if self.pickup_magnet:
@@ -514,6 +570,45 @@ class Student(Entity):
             for e in room.entities:
                 if hasattr(e, "_orb_cd") and e._orb_cd > 0:
                     e._orb_cd -= 1.0 / FPS
+
+        # --- Passive regen («Звезда отличника»): +1 half-heart / 12s ---
+        if self.has_regen and self.love < self.max_love:
+            self.regen_t += dt
+            if self.regen_t >= 12.0:
+                self.regen_t = 0.0
+                self.heal(1)
+        else:
+            self.regen_t = 0.0
+
+        # --- Familiar helper: floats near player, auto-fires at enemies ---
+        if self.has_familiar:
+            self._familiar_angle += dt * 2.2
+            if self._familiar_cd > 0:
+                self._familiar_cd -= 1.0 / FPS
+            else:
+                from mvek.entities.enemy import Enemy
+                fx_, fy_ = self._familiar_pos()
+                target = None
+                best = 1e18
+                for e in room.entities:
+                    if (isinstance(e, Enemy) or getattr(e, "is_boss", False)) and not e.dead:
+                        d2 = (e.x - fx_) ** 2 + (e.y - fy_) ** 2
+                        if d2 < best:
+                            best, target = d2, e
+                if target is not None:
+                    d = math.sqrt(best) or 1.0
+                    spd = self.shot_speed * 0.9
+                    proj = make_report(
+                        fx_, fy_,
+                        (target.x - fx_) / d * spd,
+                        (target.y - fy_) / d * spd,
+                        damage=max(0.5, self.damage * 0.5),
+                        max_range=self.shot_range,
+                        homing=self.homing,
+                    )
+                    proj.color = (180, 230, 180)
+                    room.projectiles.append(proj)
+                    self._familiar_cd = 1.0 / max(0.1, self.fire_rate * 0.6)
 
         # --- Enemy projectile collision ---
         for p in room.projectiles:
@@ -606,6 +701,9 @@ class Student(Entity):
         proj.piercing = self.piercing
         proj.freeze = self.freeze_tears
         proj.magnet = self.magnet_tears
+        proj.rainbow = getattr(self, "rainbow_trail", False)
+        if getattr(self, "has_ricochet", False):
+            proj.bounces = 1
         room.projectiles.append(proj)
         self._fire_cd = 1.0 / max(0.1, self.effective_fire_rate)
         sounds.play("shoot")
@@ -636,6 +734,11 @@ class Student(Entity):
         self.melee_swing_t = 0.18
         fx.spawn_burst(self.x + ax * 18, self.y + ay * 18,
                        (255, 240, 200), n=12, speed=3.5)
+
+    def _familiar_pos(self) -> tuple[float, float]:
+        """World position of the floating familiar (orbits the player)."""
+        a = self._familiar_angle
+        return (self.x + math.cos(a) * 26, self.y - 18 + math.sin(a) * 6)
 
     def _start_cooldown(self, seconds: float) -> None:
         """Begin the active-item cooldown and remember the duration so the
@@ -784,8 +887,9 @@ class Student(Entity):
                 else:
                     bob = 0
                 sw = sprite.get_width()
-                surface.blit(sprite, (cx - sw // 2,
+                surface.blit(self._camo_sprite(sprite), (cx - sw // 2,
                                       cy + 14 - spr_h - bob + lift))
+                self._draw_overlays(surface, cx, cy, ox, oy, lift)
                 return
 
         # Botan: use платон.png sprite
@@ -796,7 +900,7 @@ class Student(Entity):
             else:
                 bob = 0
             sprite_y = cy - 29 - bob + lift
-            surface.blit(sprite, (cx - 20, sprite_y))
+            surface.blit(self._camo_sprite(sprite), (cx - 20, sprite_y))
 
             # Draw glasses overlay if not in passives
             if "Очки ботаника" not in self.passives:
@@ -807,6 +911,7 @@ class Student(Entity):
                                    (cx + 4, head_y - 1), 3, 1)
                 pygame.draw.line(surface, (255, 255, 255),
                                  (cx - 1, head_y - 1), (cx + 1, head_y - 1))
+            self._draw_overlays(surface, cx, cy, ox, oy, lift)
             return
 
         bob = int(math.sin(self._walk_t) * 1.5) if self._is_moving else 0
@@ -917,6 +1022,28 @@ class Student(Entity):
                                 [(cx + 9, body_y + 4), (cx + 16, body_y + 2 - wf),
                                  (cx + 14, body_y + 7 - wf), (cx + 9, body_y + 8)])
 
+        self._draw_overlays(surface, cx, cy, ox, oy, lift)
+
+    def _camo_sprite(self, sprite):
+        """Если активен камуфляж — вернуть полупрозрачную копию спрайта,
+        мигающую жёлтым; иначе исходный спрайт без изменений."""
+        if self.camo_t <= 0:
+            return sprite
+        s = sprite.copy()
+        # Мигание: фаза по времени эффекта.
+        blink = int(self.camo_t * 12) % 2 == 0
+        s.set_alpha(110)
+        if blink:
+            tint = pygame.Surface(s.get_size(), pygame.SRCALPHA)
+            tint.fill((255, 220, 60, 90))
+            s.blit(tint, (0, 0), special_flags=pygame.BLEND_RGBA_ADD)
+        return s
+
+    def _draw_overlays(self, surface, cx, cy, ox, oy, lift) -> None:
+        """Item/status overlays drawn on top of the body, regardless of
+        whether the character uses a PNG sprite or the procedural body
+        (both code paths return early, so this MUST be reachable from each).
+        """
         if self.berserk_t > 0:
             r = 18 + int(math.sin(pygame.time.get_ticks() * 0.02) * 2)
             aura = pygame.Surface((r * 2, r * 2), pygame.SRCALPHA)
@@ -950,6 +1077,18 @@ class Student(Entity):
                 pygame.draw.line(surface, (160, 130, 80),
                                  (rect.left + 1, rect.top + 6),
                                  (rect.right - 1, rect.top + 6))
+
+        # Familiar helper — little floating green buddy
+        if self.has_familiar:
+            fx_, fy_ = self._familiar_pos()
+            fcx, fcy = int(fx_) + ox, int(fy_) + oy
+            glow = pygame.Surface((22, 22), pygame.SRCALPHA)
+            pygame.draw.circle(glow, (150, 230, 160, 70), (11, 11), 11)
+            surface.blit(glow, (fcx - 11, fcy - 11))
+            pygame.draw.circle(surface, (90, 160, 100), (fcx, fcy), 6)
+            pygame.draw.circle(surface, (200, 240, 200), (fcx, fcy), 4)
+            pygame.draw.circle(surface, (30, 40, 30), (fcx - 2, fcy - 1), 1)
+            pygame.draw.circle(surface, (30, 40, 30), (fcx + 2, fcy - 1), 1)
 
         if self._pickup_t > 0:
             t = 1 - self._pickup_t / 1.6

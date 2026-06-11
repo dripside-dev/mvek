@@ -1,0 +1,249 @@
+{
+  "wins": {
+    "platon": 4
+  },
+  "unlocked": [
+    "cursed_cupsize"
+  ],
+  "slots": [
+    {
+      "char": "nikitos1",
+      "char_name": "Никита 1",
+      "difficulty": 0,
+      "level": 1,
+      "seed": 1018083369,
+      "cleared": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "visited": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "locked": {
+        "4,4": [
+          "S"
+        ],
+        "4,5": [
+          "N"
+        ],
+        "3,1": [
+          "E"
+        ],
+        "8,2": [
+          "N"
+        ],
+        "8,1": [
+          "S"
+        ],
+        "4,1": [
+          "W"
+        ]
+      },
+      "current": [
+        4,
+        1
+      ],
+      "player": {
+        "speed": 3.0,
+        "damage": 1.0,
+        "fire_rate": 2.5,
+        "shot_speed": 7.0,
+        "shot_range": 360,
+        "luck": 0,
+        "max_love": 6,
+        "love": 6,
+        "soul": 0,
+        "coins": 10,
+        "bombs": 1,
+        "keys": 0,
+        "flying": false,
+        "homing": false,
+        "golden_tears": false,
+        "map_revealed": false,
+        "passives": [
+          "Книга добродетелей"
+        ],
+        "active_item": "Энергетик \"3 часа ночи\"",
+        "x": 491.8976729582797,
+        "y": 208.0
+      }
+    },
+    null,
+    {
+      "char": "cursed_cupsize",
+      "char_name": "CURSED CUPSIZE ПЛАТОН",
+      "difficulty": 0,
+      "level": 3,
+      "seed": 193639766,
+      "cleared": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "visited": [
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "locked": {
+        "4,5": [
+          "W"
+        ],
+        "3,4": [
+          "S"
+        ],
+        "6,4": [
+          "S"
+        ],
+        "3,6": [
+          "N"
+        ],
+        "6,5": [
+          "N"
+        ],
+        "5,8": [
+          "W"
+        ],
+        "4,8": [
+          "E"
+        ],
+        "3,5": [
+          "N",
+          "S",
+          "E"
+        ]
+      },
+      "current": [
+        3,
+        6
+      ],
+      "player": {
+        "speed": 4.0,
+        "damage": 4.5,
+        "fire_rate": 4.1,
+        "shot_speed": 7.0,
+        "shot_range": 360,
+        "luck": 4,
+        "max_love": 10,
+        "love": 6,
+        "soul": 0,
+        "coins": 22,
+        "bombs": 9,
+        "keys": 3,
+        "flying": false,
+        "homing": true,
+        "golden_tears": true,
+        "map_revealed": true,
+        "passives": [
+          "Нота с прослушки",
+          "USB-флешка",
+          "Студенческий проездной \"Меркурий\"",
+          "Закладка",
+          "Гантеля",
+          "Красный диплом"
+        ],
+        "active_item": null,
+        "x": 389.90372117868725,
+        "y": 104.36581328617653
+      }
+    }
+  ],
+  "settings": {
+    "music_volume": 1.0,
+    "music_on": true,
+    "fullscreen": true,
+    "difficulty": 0,
+    "window_size": 0
+  }
+}

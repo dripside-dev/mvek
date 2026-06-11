@@ -86,8 +86,9 @@ CHAR_FILES: dict[str, str] = {
     "nikitos1": "nikitos1.png",
     "nikitos2": "nikitos2.png",
     "anka": "anka.png",
+    "zlata": "zlata.png",
+    "vlad": "vlad.png",
     "cursed_cupsize": "cursed_platon.png",
-    "cursed_zupsize": "cursed_platon.png",
 }
 
 MENU_FILES: dict[str, str] = {
@@ -99,6 +100,20 @@ MENU_FILES: dict[str, str] = {
     "saves": "saves.png",
 }
 
+# Отдельные элементы интерфейса (грузятся в натуральном размере, без
+# масштабирования под весь экран). Ключ -> файл PNG в assets/menu/.
+ELEMENT_FILES: dict[str, str] = {
+    "saves_title": "saves_title.png",
+    "file1": "file1.png",
+    "file2": "file2.png",
+    "file3": "file3.png",
+    "delete_file": "delete_file.png",
+    "exit": "exit.png",
+    "char_panel": "char_panel.png",
+    "wins_card": "wins_card.png",
+    "stats_card": "stats_card.png",
+}
+
 # Размер экрана игры — слои меню масштабируются под него.
 _MENU_W, _MENU_H = 960, 720
 _menu_scaled: dict[str, "pygame.Surface | None"] = {}
@@ -108,6 +123,7 @@ _menu_scaled: dict[str, "pygame.Surface | None"] = {}
 _raw_cache: dict[str, "pygame.Surface | None"] = {}
 _icon_scaled: dict[tuple[str, int], "pygame.Surface | None"] = {}
 _char_scaled: dict[tuple[str, int], "pygame.Surface | None"] = {}
+_head_scaled: dict[tuple[str, int], "pygame.Surface | None"] = {}
 
 
 def _load_raw(path: str) -> "pygame.Surface | None":
@@ -166,8 +182,46 @@ def char_surface(char_id: str, height: int) -> "pygame.Surface | None":
     return surf
 
 
+def char_head(char_id: str, size: int) -> "pygame.Surface | None":
+    """Квадратный кроп «головы» персонажа (верхняя часть спрайта) size×size.
+
+    Отдельных голов в ассетах нет, поэтому берём верхний квадрат спрайта —
+    там обычно лицо/голова. Используется тролль-пасхалкой «ЧИТЕР».
+    """
+    key = (char_id, size)
+    if key in _head_scaled:
+        return _head_scaled[key]
+    fname = CHAR_FILES.get(char_id)
+    surf = None
+    if fname:
+        raw = _load_raw(os.path.join(_CHAR_DIR, fname))
+        if raw is not None:
+            w, h = raw.get_size()
+            side = min(w, h)
+            x0 = max(0, (w - side) // 2)
+            try:
+                crop = raw.subsurface(pygame.Rect(x0, 0, side, side)).copy()
+                surf = pygame.transform.smoothscale(crop, (size, size))
+            except Exception:
+                surf = None
+    _head_scaled[key] = surf
+    return surf
+
+
 def menu_surface(key: str) -> "pygame.Surface | None":
     fname = MENU_FILES.get(key)
+    if not fname:
+        return None
+    return _load_raw(os.path.join(_MENU_DIR, fname))
+
+
+def menu_element(key: str) -> "pygame.Surface | None":
+    """Отдельный элемент UI в натуральном размере (заголовок, карточка, кнопка).
+
+    Возвращает ``None``, если файла нет — вызывающий код рисует фолбэк.
+    Кэшируется через ``_load_raw``.
+    """
+    fname = ELEMENT_FILES.get(key)
     if not fname:
         return None
     return _load_raw(os.path.join(_MENU_DIR, fname))

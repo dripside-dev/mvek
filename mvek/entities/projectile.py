@@ -23,6 +23,16 @@ from mvek.settings import REPORT_COLOR, CRITIQUE_COLOR, TICKET_COLOR, GOLD
 from mvek import fx
 
 
+def _hue_color(h: float) -> tuple[int, int, int]:
+    """Простой HSV→RGB при S=V=1, h in [0,1]. Для радужного следа."""
+    i = int(h * 6) % 6
+    f = h * 6 - int(h * 6)
+    q = int(255 * (1 - f))
+    t = int(255 * f)
+    return ((255, t, 0), (q, 255, 0), (0, 255, t), (0, q, 255),
+            (t, 0, 255), (255, 0, q))[i]
+
+
 class Projectile(Entity):
     """Универсальный снаряд: дружественный или вражеский, с трейлом.
 
@@ -55,6 +65,9 @@ class Projectile(Entity):
         self.piercing: bool = False
         self.freeze: bool = False
         self.magnet: bool = False
+        self.rainbow: bool = False      # радужный след (Кисть)
+        self.bounces: int = 0           # сколько отскоков от стен осталось (Мяч)
+        self._rainbow_t: float = 0.0
         # Множество id уже поражённых врагов — защита от двойного урона
         # одной пулей при piercing=True.
         self._hit_set: set = set()
@@ -89,8 +102,14 @@ class Projectile(Entity):
         self.spin += 0.4
         self.travelled += math.hypot(self.vx, self.vy)
 
-        # Trail particle every other frame
-        fx.spawn_trail(self.x, self.y, self.color,
+        # Trail particle every other frame — rainbow cycles hue (Кисть).
+        if self.rainbow:
+            self._rainbow_t += 0.12
+            hue = (math.sin(self._rainbow_t) * 0.5 + 0.5)
+            trail_col = _hue_color(hue)
+        else:
+            trail_col = self.color
+        fx.spawn_trail(self.x, self.y, trail_col,
                        vx=-self.vx, vy=-self.vy,
                        life=0.18, size=2)
 
@@ -100,6 +119,20 @@ class Projectile(Entity):
                            life=0.25, size=2)
             return
         if room.is_wall(self.x, self.y):
+            # Ricochet (Футбольный мяч): отскок от стены вместо гибели.
+            if self.bounces > 0:
+                self.bounces -= 1
+                # Откатываемся на шаг назад и определяем, какая ось упёрлась.
+                self.x -= self.vx
+                self.y -= self.vy
+                if room.is_wall(self.x + self.vx, self.y):
+                    self.vx = -self.vx
+                if room.is_wall(self.x, self.y + self.vy):
+                    self.vy = -self.vy
+                # Если упёрлись «в угол» и ни одна ось не определилась —
+                # инвертируем обе, чтобы не залипнуть в стене.
+                fx.spawn_burst(self.x, self.y, self.color, n=4, speed=2)
+                return
             self.dead = True
             fx.spawn_burst(self.x, self.y, self.color, n=6, speed=2.5)
             return
